@@ -34,13 +34,16 @@ public class TransportationEmission extends EmissionSource {
 
         switch (vehicleType.toLowerCase()) {
             case "car":
-                emissionFactor = 0.12; // kg CO2 per km
+                emissionFactor = 0.12; // kg CO2 per km average emissions for cars, can vary based on fuel type and efficiency but this is a common estimate for gasoline cars
                 break;
             case "bus":
-                emissionFactor = 0.05; // kg CO2 per km
+                emissionFactor = 0.05; // kg CO2 per km lower emissions for buses compared to cars as they can carry more passengers and are often more fuel-efficient per passenger
                 break;
             case "train":
-                emissionFactor = 0.03; // kg CO2 per km
+                emissionFactor = 0.03; // kg CO2 per km lower emissions for trains compared to cars and buses as they are more efficient and often use electricity which can be generated from renewable sources
+                break;
+            case "cycle":
+                emissionFactor = 0.0; // kg CO2 per km (zero emissions for cycling)
                 break;
             default:
                 throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType); // Handle unknown vehicle types appropriately by throwing an exception
