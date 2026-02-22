@@ -32,8 +32,8 @@ public class TransportationEmission extends EmissionSource {
     public double calculateEmission() {
         double emissionFactor = 0.0;
 
-        switch (vehicleType.toLowerCase()) {
-            case "car":
+        switch (vehicleType.toLowerCase()) { //switch statement to determine the emission factor based on the vehicle type, converting to lowercase for case-insensitive comparison
+            case "car": 
                 emissionFactor = 0.12; // kg CO2 per km average emissions for cars, can vary based on fuel type and efficiency but this is a common estimate for gasoline cars
                 break;
             case "bus":
