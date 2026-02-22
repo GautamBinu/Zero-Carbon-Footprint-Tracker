@@ -1,40 +1,40 @@
-public class TransportationEmission {
-    private String modeOfTransport;
-    private double distanceTraveled;
+public class TransportationEmission extends EmissionSource {
+   
+    private String vehicleType; // e.g., "Car", "Bus", "Train"
+    private double distanceKM; // Distance traveled in kilometers
 
-    
     // Constructor
-    public TransportationEmission(String modeOfTransport, double distanceTraveled) {
-        this.modeOfTransport = modeOfTransport;
-        this.distanceTraveled = distanceTraveled;
+    public TransportationEmission(String sourceID, String category, String date, String userName, double distanceKM, String vehicleType) {
+        super(sourceID, category, date, userName); // already initializes the common attributes from EmissionSource
+        this.distanceKM = distanceKM; // initialize the distance attribute
+        this.vehicleType = vehicleType; // initialize the vehicleType attribute
     }
 
     // Getters and Setters
-    public String getModeOfTransport() {
-        return modeOfTransport;
+    public double getDistanceKM() {
+        return distanceKM;
     }
 
-    public void setModeOfTransport(String modeOfTransport) {
-        this.modeOfTransport = modeOfTransport;
+    public void setDistanceKM(double distanceKM) {
+        this.distanceKM = distanceKM;
     }
 
-    public double getDistanceTraveled() {
-        return distanceTraveled;
+    public String getVehicleType() {
+        return vehicleType;
     }
 
-    public void setDistanceTraveled(double distanceTraveled) {
-        this.distanceTraveled = distanceTraveled;
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
-
-    // Method to calculate emissions based on mode of transport and distance traveled
-    
+    // Implement the abstract method to calculate emissions based on distance and vehicle type
+    @Override // Override the calculateEmission method to compute emissions based on distance and vehicle type
     public double calculateEmission() {
         double emissionFactor = 0.0;
 
-        switch (modeOfTransport.toLowerCase()) {
+        switch (vehicleType.toLowerCase()) {
             case "car":
-                emissionFactor = 0.24; // kg CO2 per km
+                emissionFactor = 0.12; // kg CO2 per km
                 break;
             case "bus":
                 emissionFactor = 0.05; // kg CO2 per km
@@ -42,22 +42,15 @@ public class TransportationEmission {
             case "train":
                 emissionFactor = 0.03; // kg CO2 per km
                 break;
-            case "bicycle":
-                emissionFactor = 0.0; // kg CO2 per km
-                break;
             default:
-                System.out.println("Unknown mode of transport. Emission factor set to 0.");
-                break;
+                throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType); // Handle unknown vehicle types appropriately by throwing an exception
         }
 
-        return emissionFactor * distanceTraveled; // Total emissions in kg CO2
+        return distanceKM * emissionFactor; // Total emissions in kg CO2
     }
 
-    @Override
+    @Override // Override the toString method to include distance and vehicle type information
     public String toString() {
-        return "Mode of Transport: " + modeOfTransport + " Distance Traveled: " + distanceTraveled + " km Emission: " + calculateEmission() + " kg CO2";
-    }
-
-
-    
+        return super.toString() + " Distance: " + distanceKM + " km Vehicle Type: " + vehicleType;
+        }
 }
