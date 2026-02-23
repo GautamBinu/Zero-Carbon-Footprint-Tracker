@@ -15,16 +15,16 @@ public class FoodEmission extends EmissionSource {
     // getters and setters
     public String getMealType(){return mealType;}
 
-    public void setMealType(){this.mealType=mealType;}
+    public void setMealType(mealType){this.mealType=mealType;}
 
     public int getNumberOfMeals(){return numberOfMeals;}
 
-    public void setNumberOfMeals(){this.numberOfMeals=numberOfMeals;}
+    public void setNumberOfMeals(numberOfMeals){this.numberOfMeals=numberOfMeals;}
 
 
     @Override
     public double calculateEmission(){
-        double mealFactor = 1.0;
+        double mealFactor;
         mealType = mealType.toLowerCase();
 
         if (mealType.equals("vegan")){mealFactor=0.2;}
@@ -35,7 +35,7 @@ public class FoodEmission extends EmissionSource {
 
         else if(mealType.equals("beef")){mealFactor=0.5;}
 
-        else{return mealFactor;}
+        else{mealFactor=0.0;}
 
         return numberOfMeals*mealFactor;
 
