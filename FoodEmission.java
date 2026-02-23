@@ -15,11 +15,11 @@ public class FoodEmission extends EmissionSource {
     // getters and setters
     public String getMealType(){return mealType;}
 
-    public void setMealType(mealType){this.mealType=mealType;}
+    public void setMealType(String mealType){this.mealType=mealType;}
 
     public int getNumberOfMeals(){return numberOfMeals;}
 
-    public void setNumberOfMeals(numberOfMeals){this.numberOfMeals=numberOfMeals;}
+    public void setNumberOfMeals(int numberOfMeals){this.numberOfMeals=numberOfMeals;}
 
 
     @Override
