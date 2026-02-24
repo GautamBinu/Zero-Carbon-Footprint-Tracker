@@ -55,6 +55,6 @@ public abstract class EmissionSource {
     //Formating 
      @Override
      public String toString () {
-        return "Source ID: " + sourceID + " Category: " + category + " Date: " + date + " User Name: " + userName + " Emission: " + calculateEmission();
+       return String.format("%s | %s | %s", sourceID, category, date);
     }
 }

@@ -44,7 +44,12 @@ public class FoodEmission extends EmissionSource {
 
     @Override
     public String toString(){
-        return super.toString() + "mealType: " + mealType + " numberOfMeals: " + numberOfMeals;
+        return String.format("%s | %s, %d meals | %.2f kg CO2", 
+                super.toString(), 
+                mealType, 
+                numberOfMeals, 
+                calculateEmission());
+    
     }
 
     

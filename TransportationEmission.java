@@ -49,6 +49,10 @@ public class TransportationEmission extends EmissionSource {
 
     @Override // Override the toString method to include distance and vehicle type information
     public String toString() {
-        return super.toString() + " Distance: " + distanceKM + " km Vehicle Type: " + vehicleType;
+        return String.format("%s | %s, %.1f km | %.2f kg CO2", 
+                super.toString(), 
+                vehicleType, 
+                distanceKM, 
+                calculateEmission());
         }
 }
