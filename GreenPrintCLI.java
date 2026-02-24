@@ -23,9 +23,9 @@ public class GreenPrintCLI {
         tracker.addEntry(new TransportationEmission("T001", "Transportation", "2024-06-01", "Charlie", 10.0, "Car"));
         tracker.addEntry(new EnergyEmission("E002", "Energy", "2024-06-01", "Charlie", 25.0, "solar"));
 
-        System.out.println("Total Emissions for Alice: " + tracker.GetTotalEmissionsForUser("Alice") + " kg CO2\n");
+        System.out.printf("Total Emissions for Alice: %.2f kg CO2\n\n", tracker.GetTotalEmissionsForUser("Alice"));
 
-        System.out.println("Total Emissions: " + tracker.GetTotalEmissions() + " kg CO2\n");
+        System.out.printf("Total Emissions: %.2f kg CO2\n\n", tracker.GetTotalEmissions());
 
         // Generate the daily report
         tracker.generateDailyReport();
