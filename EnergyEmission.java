@@ -44,9 +44,9 @@ public class EnergyEmission extends EmissionSource{
      * 
      * Calculate the emission based on the energy source and the kWH used. 
      * The emission factor for;
-     * grid=2.0
-     * solar=0.65 
-     * wind= 0.75
+     * grid=0.404
+     * solar=0.050
+     * wind= 0.025
      * If the energy source is not recognized, the emission factor is 0.0.
      */
     @Override
@@ -56,15 +56,15 @@ public class EnergyEmission extends EmissionSource{
         energySource=energySource.toLowerCase();
 
         if (energySource.equals("grid")){
-            energyFactor=2.0;
+            energyFactor=0.404;
 
         }
         else if (energySource.equals("solar")){
-            energyFactor=0.65;
+            energyFactor=0.050;
 
         }
         else if (energySource.equals("wind")){
-            energyFactor=0.75;
+            energyFactor=0.025;
         }
         else{
             throw new IllegalArgumentException("Invalid energy source: "+energySource);
