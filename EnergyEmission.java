@@ -50,10 +50,7 @@ public class EnergyEmission extends EmissionSource{
      */
     @Override
     public double calculateEmission(){
-
-        if (kWhused == null || energySource == null) {
-            return 0.0;
-        }
+        
         double energyFactor=0.0;
         energySource=energySource.toLowerCase();
 
@@ -79,7 +76,11 @@ public class EnergyEmission extends EmissionSource{
      */
     @Override
     public String toString(){
-        return super.toString() + "Energy Source: "+energySource+"kWH used: "+kWhused;
+        return String.format("%s | %s, %.1f kWh | %.2f kg CO2", 
+                super.toString(), 
+                energySource, 
+                kWhused, 
+                calculateEmission());
     }
             
     
