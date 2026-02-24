@@ -1,4 +1,5 @@
-Zero Carbon Footprint Tracker (GreenPrint)
+## Zero Carbon Footprint Tracker
+
 A Java-based command-line application designed to track and calculate carbon emissions across multiple categories for different users. This tool helps organizations and individuals monitor their environmental impact by tracking emissions from energy consumption, food choices, and transportation.
 
 📋 Overview
