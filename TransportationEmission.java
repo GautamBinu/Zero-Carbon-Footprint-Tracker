@@ -31,22 +31,17 @@ public class TransportationEmission extends EmissionSource {
     @Override // Override the calculateEmission method to compute emissions based on distance and vehicle type
     public double calculateEmission() {
         double emissionFactor = 0.0;
-
-        switch (vehicleType.toLowerCase()) { //switch statement to determine the emission factor based on the vehicle type, converting to lowercase for case-insensitive comparison
-            case "car": 
-                emissionFactor = 0.12; // kg CO2 per km average emissions for cars, can vary based on fuel type and efficiency but this is a common estimate for gasoline cars
-                break;
-            case "bus":
-                emissionFactor = 0.05; // kg CO2 per km lower emissions for buses compared to cars as they can carry more passengers and are often more fuel-efficient per passenger
-                break;
-            case "train":
-                emissionFactor = 0.03; // kg CO2 per km lower emissions for trains compared to cars and buses as they are more efficient and often use electricity which can be generated from renewable sources
-                break;
-            case "cycle":
-                emissionFactor = 0.0; // kg CO2 per km (zero emissions for cycling)
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType); // Handle unknown vehicle types appropriately by throwing an exception
+        String vehicleTypeLower = vehicleType.toLowerCase(); // Convert vehicle type to lowercase for case-insensitive comparison
+        if (vehicleTypeLower.equals("car")) {
+            emissionFactor = 0.120; // // kg CO2 per km average emissions for cars, can vary based on fuel type and efficiency but this is a common estimate for gasoline cars
+        } else if (vehicleTypeLower.equals("bus")) {
+            emissionFactor = 0.060; //  kg CO2 per km lower emissions for buses compared to cars as they can carry more passengers and are often more fuel-efficient per passenger
+        } else if (vehicleTypeLower.equals("train")) {
+            emissionFactor = 0.045; // kg CO2 per km lower emissions for trains compared to cars and buses as they are more efficient and often use electricity which can be generated from renewable sources
+        } else if (vehicleTypeLower.equals("cycle")) {
+            emissionFactor = 0.0; // Bicycles have zero emissions
+        } else {
+            throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType); // Handle unknown vehicle types
         }
 
         return distanceKM * emissionFactor; // Total emissions in kg CO2
