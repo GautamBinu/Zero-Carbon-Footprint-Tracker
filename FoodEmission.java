@@ -54,7 +54,7 @@ public class FoodEmission extends EmissionSource {
 
         else if(mealType.equals("beef")){mealFactor=2.04;}
 
-        else{mealFactor=0.0;}
+        else{throw new IllegalArgumentException("Invalid meal type: "+mealType);}
 
         return numberOfMeals*mealFactor;
 

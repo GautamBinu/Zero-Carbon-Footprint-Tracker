@@ -13,6 +13,9 @@ public class GreenPrintCLI {
          * This method effectively showcases how the FootprintTracker can be used to manage and track carbon footprint data for multiple users and categories.
          */
 
+        try {
+            // Create an instance of FootprintTracker
+
         FootprintTracker tracker = new FootprintTracker("RIT GreenPrint 2026");
 
         // Sample data entries
@@ -29,5 +32,9 @@ public class GreenPrintCLI {
 
         // Generate the daily report
         tracker.generateDailyReport();
+
+        } catch (Exception e) {
+            System.err.println("An Error Occurred: " + e.getMessage());
+        }
     }    
 }

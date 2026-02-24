@@ -25,7 +25,11 @@ public class FootprintTracker {
      * @param entry
      */
     public void addEntry(EmissionSource entry) {
+        try {
         emissions.add(entry);
+        } catch (Exception e) {
+            System.err.println("An Error Occurred while adding an entry: " + e.getMessage());
+        }
     }
 
     /**
@@ -33,11 +37,16 @@ public class FootprintTracker {
      * @return the total emissions in kg CO2 for all entries currently tracked by this FootprintTracker instance, calculated by summing the emissions from each entry in the emissions list using their respective calculateEmission() methods.
      */
     public double GetTotalEmissions() {
-        double total = 0.0;
-        for (EmissionSource entry : emissions) {
-            total += entry.calculateEmission();
+        try {
+            double total = 0.0;
+            for (EmissionSource entry : emissions) {
+                total += entry.calculateEmission();
+            }
+            return total;
+        } catch (Exception e) {
+            System.err.println("An Error Occurred while calculating total emissions: " + e.getMessage());
+            return 0.0; // Return 0.0 in case of an error to indicate that the total emissions could not be calculated.
         }
-        return total;
     }
 
     /**
@@ -46,6 +55,8 @@ public class FootprintTracker {
      * @return the total emissions in kg CO2 for the specified user.
      */
     public double GetTotalEmissionsForUser(String userName) {
+        try {
+
         double total = 0.0;
         for (EmissionSource entry : emissions) {
             if (entry.getUserName().equals(userName)) {
@@ -53,6 +64,11 @@ public class FootprintTracker {
             }
         }
         return total;
+
+        } catch (Exception e) {
+            System.err.println("An Error Occurred while calculating total emissions for user: " + e.getMessage());
+            return 0.0; // Return 0.0 in case of an error to indicate that the total emissions could not be calculated for the specified user.
+        }
     }
 
     /**
@@ -60,6 +76,9 @@ public class FootprintTracker {
      * prints a formatted daily report that groups emissions by user, includes subtotals for each user, and a grand total for all users, displaying the details of each emission entry and the calculated emissions in kg CO2.
      */
     public void generateDailyReport() {
+
+        try{
+
         System.out.println("=== " + trackerName + " Daily Report ===\n");
         
         // Get unique users
@@ -93,6 +112,11 @@ public class FootprintTracker {
         
         // Print grand total
         System.out.printf("\n\nGrand Total: %.2f kg CO2", grandTotal);
+
+    } catch (Exception e) {
+        System.err.println("An Error Occurred while generating the report: " + e.getMessage());
     }
+
+}
 
 }
