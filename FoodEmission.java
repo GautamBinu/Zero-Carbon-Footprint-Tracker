@@ -31,9 +31,9 @@ public class FoodEmission extends EmissionSource {
 
         else if(mealType.equals("vegetarian")){mealFactor=0.09;}
 
-        else if(mealType.equals("poultry")){mealFactor=0.79;}
+        else if(mealType.equals("poultry")){mealFactor=1.29;}
 
-        else if(mealType.equals("beef")){mealFactor=0.92;}
+        else if(mealType.equals("beef")){mealFactor=2.04;}
 
         else{mealFactor=0.0;}
 
