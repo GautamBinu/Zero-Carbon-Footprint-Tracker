@@ -27,13 +27,13 @@ public class FoodEmission extends EmissionSource {
         double mealFactor;
         mealType = mealType.toLowerCase();
 
-        if (mealType.equals("vegan")){mealFactor=0.2;}
+        if (mealType.equals("vegan")){mealFactor=0.67;}
 
-        else if(mealType.equals("vegetarian")){mealFactor=0.3;}
+        else if(mealType.equals("vegetarian")){mealFactor=0.80;}
 
-        else if(mealType.equals("poultry")){mealFactor=0.4;}
+        else if(mealType.equals("poultry")){mealFactor=2.40;}
 
-        else if(mealType.equals("beef")){mealFactor=0.5;}
+        else if(mealType.equals("beef")){mealFactor=3.02;}
 
         else{mealFactor=0.0;}
 
