@@ -16,7 +16,7 @@ public class FootprintTracker {
      */
 
     public FootprintTracker(String trackerName) {
-        this.trackerName = trackerName;
+        this.trackerName = "RIT GreenPrint 2026";
         this.emissions = new ArrayList<>();
     }
 
@@ -60,7 +60,7 @@ public class FootprintTracker {
      * prints a formatted daily report that groups emissions by user, includes subtotals for each user, and a grand total for all users, displaying the details of each emission entry and the calculated emissions in kg CO2.
      */
     public void generateDailyReport() {
-        System.out.println("=== RIT GreenPrint 2026 — Daily Report ===\n");
+        System.out.println("=== " + trackerName + " Daily Report ===\n");
         
         // Get unique users
         ArrayList<String> users = new ArrayList<>();
