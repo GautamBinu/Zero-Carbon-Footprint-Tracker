@@ -50,7 +50,7 @@ public class EnergyEmission extends EmissionSource{
      */
     @Override
     public double calculateEmission(){
-        
+
         double energyFactor=0.0;
         energySource=energySource.toLowerCase();
 
