@@ -1,18 +1,37 @@
 import java.util.ArrayList;
 
+/**
+ * The FootprintTracker class is responsible for managing and tracking the carbon footprint entries for different users. It allows adding new emission entries, calculating total emissions for all users or specific users, and generating a daily report that groups emissions by user and provides subtotals and a grand total of emissions.
+ */
+
+
 public class FootprintTracker {
     private String trackerName;
     private ArrayList<EmissionSource> emissions;
+
+    /**
+    * constructs a new FootprintTracker with the specified tracker name and initializes an empty list of emissions.
+    * @param trackerName the name of the footprint tracker, which can be used to identify the specific tracking instance (e.g., "RIT GreenPrint 2026").
+    * @param emissions the list of emission entries that will be tracked by this FootprintTracker instance. This list is initialized as an empty ArrayList and will store instances of EmissionSource or its subclasses (e.g., EnergyEmission, FoodEmission, TransportationEmission) as they are added to the tracker.
+     */
 
     public FootprintTracker(String trackerName) {
         this.trackerName = trackerName;
         this.emissions = new ArrayList<>();
     }
 
+    /**
+     * Adds a new emission entry to the list of emissions being tracked. The entry must be an instance of EmissionSource or its subclasses, which contain the necessary information to calculate emissions (e.g., sourceID, category, date, userName) and implement the calculateEmission() method to compute the specific emissions based on their attributes.
+     * @param entry
+     */
     public void addEntry(EmissionSource entry) {
         emissions.add(entry);
     }
 
+    /**
+     * Calculates the total emissions by iterating through all the entries in the emissions list and summing up the calculated emissions for each entry using the calculateEmission() method defined in the EmissionSource class and implemented by its subclasses. This method returns the total emissions in kg CO2 for all entries currently tracked by this FootprintTracker instance.
+     * @return the total emissions in kg CO2 for all entries currently tracked by this FootprintTracker instance, calculated by summing the emissions from each entry in the emissions list using their respective calculateEmission() methods.
+     */
     public double GetTotalEmissions() {
         double total = 0.0;
         for (EmissionSource entry : emissions) {
@@ -21,6 +40,11 @@ public class FootprintTracker {
         return total;
     }
 
+    /**
+     * Calculates the total emissions for a specific user by iterating through all the entries in the emissions list, checking if the userName of each entry matches the specified userName, and summing up the calculated emissions for those entries that belong to the specified user. This method returns the total emissions in kg CO2 for the specified user based on their tracked entries.
+     * @param userName
+     * @return the total emissions in kg CO2 for the specified user.
+     */
     public double GetTotalEmissionsForUser(String userName) {
         double total = 0.0;
         for (EmissionSource entry : emissions) {
@@ -31,6 +55,10 @@ public class FootprintTracker {
         return total;
     }
 
+    /**
+     * Generates a daily report that groups emissions by user, prints each entry for each user, calculates and prints the subtotal of emissions for each user, and finally calculates and prints the grand total of emissions for all users. The report is formatted to display the details of each emission entry (e.g., sourceID, category, date) along with the calculated emissions in kg CO2, and it provides a clear summary of the emissions for each user as well as the overall total.
+     * prints a formatted daily report that groups emissions by user, includes subtotals for each user, and a grand total for all users, displaying the details of each emission entry and the calculated emissions in kg CO2.
+     */
     public void generateDailyReport() {
         System.out.println("=== RIT GreenPrint 2026 — Daily Report ===\n");
         

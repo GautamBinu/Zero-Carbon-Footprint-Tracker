@@ -1,6 +1,16 @@
 public class EnergyEmission extends EmissionSource{
     private double kWhused;
     private String energySource;
+
+    /**
+     * Constructor for EnergyEmission
+     * @param sourceID
+     * @param category
+     * @param date
+     * @param userName
+     * @param kWhused
+     * @param energySource
+     */
     
     public EnergyEmission(String sourceID, String category, String date, String userName,double  kWhused, String energySource){
         super(sourceID, category, date, userName);
@@ -48,6 +58,7 @@ public class EnergyEmission extends EmissionSource{
      * solar=0.050
      * wind= 0.025
      * If the energy source is not recognized, the emission factor is 0.0.
+     * @return the total emission in kg CO2 based on the energy source and the kWH used. If the energy source is not recognized, an IllegalArgumentException is thrown.
      */
     @Override
     public double calculateEmission(){
