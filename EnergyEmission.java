@@ -41,6 +41,7 @@ public class EnergyEmission extends EmissionSource{
 
     /**
      * 
+     * 
      * Calculate the emission based on the energy source and the kWH used. 
      * The emission factor for;
      * grid=2.0
