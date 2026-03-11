@@ -15,7 +15,7 @@ public class FootprintTracker {
     * @param emissions the list of emission entries that will be tracked by this FootprintTracker instance. This list is initialized as an empty ArrayList and will store instances of EmissionSource or its subclasses (e.g., EnergyEmission, FoodEmission, TransportationEmission) as they are added to the tracker.
      */
 
-    public FootprintTracker(String trackerName) {
+    public FootprintTracker() {
         this.trackerName = "RIT GreenPrint 2026";
         this.emissions = new ArrayList<>();
     }
@@ -95,13 +95,13 @@ public class FootprintTracker {
         // Print emissions grouped by user
         for (String user : users) {
             System.out.println("\nUser: " + user);
-            double userTotal = 0.0;
+            double userTotal = GetTotalEmissionsForUser(user);
             
             // Print all entries for this user
             for (EmissionSource entry : emissions) {
                 if (entry.getUserName().equals(user)) {
                     System.out.println(entry.toString());
-                    userTotal += entry.calculateEmission();
+                    
                 }
             }
             
