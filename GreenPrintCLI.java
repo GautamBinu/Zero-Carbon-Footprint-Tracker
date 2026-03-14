@@ -20,7 +20,7 @@ public class GreenPrintCLI{
             // Create an instance of FootprintTracker
 
         FootprintTracker tracker = new FootprintTracker();
-
+        Logger log = new Logger();
 
 
 
@@ -28,8 +28,9 @@ public class GreenPrintCLI{
 
         
 
-        
-        tracker.addEntry(new EnergyEmission("E001", "Energy", "2024-06-01", "Alice", 15.0, "Grid"));
+
+        EmissionSource tracker1 = new EnergyEmission("E001", "Energy", "2024-06-01", "Alice", 15.0, "Grid");
+        tracker.addEntry(tracker1);
         tracker.addEntry(new FoodEmission("F002", "Food", "2024-06-01", "Alice", "Vegetarian", 2));
         tracker.addEntry(new FoodEmission("F001", "Food", "2024-06-01", "Bob", "Vegan", 3));
         tracker.addEntry(new TransportationEmission("T002", "Transportation", "2024-06-01", "Bob", 15.0, "Bus"));
@@ -40,6 +41,7 @@ public class GreenPrintCLI{
 
         System.out.printf("Total Emissions: %.2f kg CO2\n\n", tracker.GetTotalEmissions());
 
+        log.log("STATE_SAVED", tracker1.toString()); //logger test
         // Generate the daily report
         tracker.generateDailyReport();
             
