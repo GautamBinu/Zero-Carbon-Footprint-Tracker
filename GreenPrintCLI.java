@@ -1,4 +1,7 @@
-public class GreenPrintCLI {
+public class GreenPrintCLI{
+
+
+
 
     /**
      * The main method serves as the entry point for the GreenPrintCLI application. It creates an instance of the FootprintTracker class.
@@ -16,9 +19,16 @@ public class GreenPrintCLI {
         try {
             // Create an instance of FootprintTracker
 
-        FootprintTracker tracker = new FootprintTracker("RIT GreenPrint 2026");
+        FootprintTracker tracker = new FootprintTracker();
 
-        // Sample data entries
+
+
+
+
+
+        
+
+        
         tracker.addEntry(new EnergyEmission("E001", "Energy", "2024-06-01", "Alice", 15.0, "Grid"));
         tracker.addEntry(new FoodEmission("F002", "Food", "2024-06-01", "Alice", "Vegetarian", 2));
         tracker.addEntry(new FoodEmission("F001", "Food", "2024-06-01", "Bob", "Vegan", 3));
@@ -32,6 +42,7 @@ public class GreenPrintCLI {
 
         // Generate the daily report
         tracker.generateDailyReport();
+            
 
         } catch (Exception e) {
             System.err.println("An Error Occurred: " + e.getMessage());
