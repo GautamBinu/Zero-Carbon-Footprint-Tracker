@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class EmissionIDValidator extends tester123{
+public class EmissionIDValidator extends GreenPrintCLI {
     //EXTENDS some class eventually
-    private final String LOG_FILE;
+     static String LOG_FILE;
 
-    public EmissionIDValidator(String LOG_FILE){
-        this.LOG_FILE="greenprint_log.txt";
+    public EmissionIDValidator(){
+        this.LOG_FILE="Zero-Carbon-Footprint-Tracker/greenprint_log.txt";
     }
 
     public static int ValidateFinal(String input,ArrayList<String> id_list){
@@ -28,12 +28,12 @@ public class EmissionIDValidator extends tester123{
         // Idea is to implement the "method/thing" in the GUI class itself, for error type, and display the error as text to the user in the GUI, all in the same class
     }
     public static int ValidateFinal(String input) throws IOException {
-        EmissionIDValidator validator = new EmissionIDValidator("greenprint_log.txt");
-        ArrayList<String> id_list = new ArrayList<>(validator.extractID());
+        
+        ArrayList<String> id_list = new ArrayList<>(extractID());
         return ValidateFinal(input, id_list);
     }
 
-    public List<String> extractID() throws IOException{
+    public static List<String> extractID() throws IOException{
         List<String> id_list= new ArrayList<>();
 
         try(
@@ -58,6 +58,7 @@ public class EmissionIDValidator extends tester123{
                 }
             }
         }
+       
         return id_list;
 
     }
