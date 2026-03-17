@@ -1,53 +1,71 @@
-public class GreenPrintCLI{
+import java.io.IOException;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.Tab;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.geometry.Side;
+import javafx.geometry.Insets;
 
+public class GreenPrintCLI extends Application {
 
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("GreenPrint CLI");
+        
+        
+        // Create the TabPane
+        TabPane tabPane = new TabPane();
+        
+        tabPane.setStyle( 
+        "-fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif; " +
+        "-fx-font-size: 13.5px; " +
+        "-fx-font-weight: bold;" 
+          
+        );      
+        
+        
+        tabPane.setTabMinHeight(40);
+        tabPane.setTabMinWidth(150);
+       
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        tabPane.setSide(Side.TOP);
 
-    /**
-     * The main method serves as the entry point for the GreenPrintCLI application. It creates an instance of the FootprintTracker class.
-     * @param args
-     */
+        // Create the Dashboard tab
+        Tab dashboardTab = new Tab();
+        dashboardTab.setText("Dashboard");
+        dashboardTab.setContent(Dashboard.createDashboardContent());
+        
+        // Create the Data Operations tab
+        Tab dataOpsTab = new Tab();
+        dataOpsTab.setText("Data Operations");
+        
+        
+        // Create the Offset Transactions tab
+        Tab offsetTab = new Tab();
+        offsetTab.setText("Offset Transactions");
+        
+        // Add tabs to the TabPane
+        tabPane.getTabs().addAll(dashboardTab, dataOpsTab, offsetTab);
+        
+        // Create the scene and add the TabPane
+        Scene scene = new Scene(tabPane, 800, 600);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 
-    public static void main(String[] args) {
-
-        /**
-         * The main method serves as the entry point for the GreenPrintCLI application. It creates an instance of the FootprintTracker class, adds sample emission entries for different users (Alice, Bob, Charlie) across various categories (Energy, Food, Transportation), 
-         * and demonstrates the functionality of calculating total emissions for a specific user and for all users. Finally, it generates a daily report that summarizes the emissions by user and provides subtotals and a grand total of emissions in kg CO2. 
-         * This method effectively showcases how the FootprintTracker can be used to manage and track carbon footprint data for multiple users and categories.
-         */
-
-        try {
-            // Create an instance of FootprintTracker
-
-        FootprintTracker tracker = new FootprintTracker();
-        Logger log = new Logger();
-
-
-
-
+    public static void main(String[] args) throws IOException {
 
         
-
-
-        EmissionSource tracker1 = new EnergyEmission("E001", "Energy", "2024-06-01", "Alice", 15.0, "Grid");
-        tracker.addEntry(tracker1);
-        tracker.addEntry(new FoodEmission("F002", "Food", "2024-06-01", "Alice", "Vegetarian", 2));
-        tracker.addEntry(new FoodEmission("F001", "Food", "2024-06-01", "Bob", "Vegan", 3));
-        tracker.addEntry(new TransportationEmission("T002", "Transportation", "2024-06-01", "Bob", 15.0, "Bus"));
-        tracker.addEntry(new TransportationEmission("T001", "Transportation", "2024-06-01", "Charlie", 10.0, "Car"));
-        tracker.addEntry(new EnergyEmission("E002", "Energy", "2024-06-01", "Charlie", 25.0, "solar"));
-
-        System.out.printf("Total Emissions for Alice: %.2f kg CO2\n\n", tracker.GetTotalEmissionsForUser("Alice"));
-
-        System.out.printf("Total Emissions: %.2f kg CO2\n\n", tracker.GetTotalEmissions());
-
-        log.log("STATE_SAVED", tracker1.toString()); //logger test
-        // Generate the daily report
-        tracker.generateDailyReport();
-            
-
-        } catch (Exception e) {
-            System.err.println("An Error Occurred: " + e.getMessage());
-        }
-    }    
+        // Launch the JavaFX application
+        launch(args);
+    }
 }
+
+ 
