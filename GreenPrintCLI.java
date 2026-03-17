@@ -35,7 +35,7 @@ public class GreenPrintCLI extends Application {
         tabPane.setTabMinWidth(150);
        
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabPane.setSide(Side.TOP);
+        tabPane.setSide(Side.BOTTOM);
 
         // Create the Dashboard tab
         Tab dashboardTab = new Tab();
