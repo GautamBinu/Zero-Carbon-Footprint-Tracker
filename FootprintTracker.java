@@ -1,4 +1,6 @@
+
 import java.util.ArrayList;
+
 
 /**
  * The FootprintTracker class is responsible for managing and tracking the carbon footprint entries for different users. It allows adding new emission entries, calculating total emissions for all users or specific users, and generating a daily report that groups emissions by user and provides subtotals and a grand total of emissions.
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 public class FootprintTracker {
     private String trackerName;
     private ArrayList<EmissionSource> emissions;
+    Logger log = new Logger();
+   
 
     /**
     * constructs a new FootprintTracker with the specified tracker name and initializes an empty list of emissions.
@@ -26,10 +30,38 @@ public class FootprintTracker {
      */
     public void addEntry(EmissionSource entry) {
         try {
-        emissions.add(entry);
+            
+
+             emissions.add(entry);
+             log.log("STATE_SAVED", entry.toString());
         } catch (Exception e) {
             System.err.println("An Error Occurred while adding an entry: " + e.getMessage());
         }
+    }
+
+    /**
+     *   Returns the total number of emission entries currently being tracked by this FootprintTracker instance, which is determined by the size of the emissions list. This method provides a way to quickly assess how many entries have been added to the tracker without needing to access the list directly.
+     * @return the total number of emission entries currently being tracked by this FootprintTracker instance, which is determined by the size of the emissions list.
+     */
+
+    public Integer getTotalEntries() {
+        return emissions.size();
+    }
+
+    /**
+     * Returns a list of emission entries that belong to a specific user by iterating through the emissions list and checking if the userName of each entry matches the specified userName. This method allows users to retrieve all their tracked emission entries for review or analysis.
+     * @param userName
+     * @return a list of emission entries that belong to the specified user, which is determined by matching the userName of each entry in the emissions list with the provided userName parameter. The returned list contains all entries that are associated with the specified user, allowing for easy access and review of their tracked emissions.
+     */
+
+    public ArrayList<EmissionSource> getEntriesByUser(String userName) {
+        ArrayList<EmissionSource> userEntries = new ArrayList<>();
+        for (EmissionSource entry : emissions) {
+            if (entry.getUserName().equals(userName)) {
+                userEntries.add(entry);
+            }
+        }
+        return userEntries;
     }
 
     /**
@@ -72,6 +104,56 @@ public class FootprintTracker {
     }
 
     /**
+     * Determines the type of emission for a given entry by checking the instance type of the entry (e.g., EnergyEmission, FoodEmission, TransportationEmission) and returns a formatted string that includes specific details relevant to that type of emission (e.g., KWH used and energy source for EnergyEmission, meal type and number of meals for FoodEmission, distance and transportation mode for TransportationEmission). If the entry does not match any known emission types, it returns "Unknown". This method provides a way to extract and display specific information about each emission entry based on its type.
+     * @param entry
+     * @return a formatted string containing specific details about the emission entry based on its type, or "Unknown" if the entry type is not recognized.
+     */
+
+    public String TypeofEmission(EmissionSource entry) {
+    if (entry instanceof EnergyEmission energyEmission) {
+        return "KWH used: " + energyEmission.getKwhused() + "\n" + "Energy Source: " + energyEmission.getEnergySource();
+    } else if (entry instanceof FoodEmission foodEmission) {
+        return "Meal Type: " + foodEmission.getMealType() + "\n" + "Number of Meals: " + foodEmission.getNumberOfMeals();
+    } else if (entry instanceof TransportationEmission transportationEmission) {
+        return "Distance: " + transportationEmission.getDistanceKM() + "\n" + "Transportation Mode: " + transportationEmission.getVehicleType();
+    } else {
+        return "Unknown";
+    }
+}
+
+
+    /**
+     * Returns a list of unique user names from the emissions list.
+     * @return an ArrayList of unique user names.
+     */
+    public ArrayList<String> getUniqueUsers() {
+        ArrayList<String> uniqueUsers = new ArrayList<>();
+        for (EmissionSource entry : emissions) {
+        String userName = entry.getUserName();
+        if (!uniqueUsers.contains(userName)) {
+            uniqueUsers.add(userName);
+        }
+    }
+         return uniqueUsers;
+    }
+
+    /**
+     * Determines the user with the highest total emissions by iterating through the list of unique users, calculating the total emissions for each user using the GetTotalEmissionsForUser method, and comparing these totals to find the user with the highest emissions. This method returns the name of the user who has the highest total emissions based on their tracked entries.
+     * @return the name of the user with the highest total emissions.
+     */
+    public String getHighestTotalEmissionUser() {
+        String highestUser = "";
+        double highestEmission = 0.0;
+        ArrayList<String> users = getUniqueUsers();
+        for (String user : users) {
+            double userEmission = GetTotalEmissionsForUser(user);
+            if (userEmission > highestEmission) { highestEmission = userEmission; highestUser = user; }
+        }
+        return highestUser;
+    }
+
+
+    /**
      * Generates a daily report that groups emissions by user, prints each entry for each user, calculates and prints the subtotal of emissions for each user, and finally calculates and prints the grand total of emissions for all users. The report is formatted to display the details of each emission entry (e.g., sourceID, category, date) along with the calculated emissions in kg CO2, and it provides a clear summary of the emissions for each user as well as the overall total.
      * prints a formatted daily report that groups emissions by user, includes subtotals for each user, and a grand total for all users, displaying the details of each emission entry and the calculated emissions in kg CO2.
      */
@@ -82,20 +164,14 @@ public class FootprintTracker {
         System.out.println("=== " + trackerName + " Daily Report ===\n");
         
         // Get unique users
-        ArrayList<String> users = new ArrayList<>();
-        for (EmissionSource entry : emissions) {
-            String userName = entry.getUserName();
-            if (!users.contains(userName)) {
-                users.add(userName);
-            }
-        }
+        ArrayList<String> users = getUniqueUsers();
         
         double grandTotal = 0.0;
         
         // Print emissions grouped by user
         for (String user : users) {
             System.out.println("\nUser: " + user);
-            double userTotal = GetTotalEmissionsForUser(user);
+            
             
             // Print all entries for this user
             for (EmissionSource entry : emissions) {
@@ -106,17 +182,19 @@ public class FootprintTracker {
             }
             
             // Print user subtotal
-            System.out.printf("Subtotal: %.2f kg CO2\n", userTotal);
-            grandTotal += userTotal;
+            System.out.printf("Subtotal: %.2f kg CO2\n", GetTotalEmissionsForUser(user));
+           
         }
         
         // Print grand total
-        System.out.printf("\n\nGrand Total: %.2f kg CO2", grandTotal);
+        System.out.printf("\n\nGrand Total: %.2f kg CO2\n\n", GetTotalEmissions());
 
     } catch (Exception e) {
         System.err.println("An Error Occurred while generating the report: " + e.getMessage());
     }
 
 }
+
+   
 
 }

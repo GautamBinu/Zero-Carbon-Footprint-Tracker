@@ -15,6 +15,8 @@ import javafx.geometry.Insets;
 
 public class GreenPrintCLI extends Application {
 
+    static FootprintTracker tracker = new FootprintTracker();
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("GreenPrint CLI");
@@ -40,7 +42,7 @@ public class GreenPrintCLI extends Application {
         // Create the Dashboard tab
         Tab dashboardTab = new Tab();
         dashboardTab.setText("Dashboard");
-        dashboardTab.setContent(Dashboard.createDashboardContent());
+        dashboardTab.setContent(Dashboard.createDashboard());
         
         // Create the Data Operations tab
         Tab dataOpsTab = new Tab();
@@ -61,6 +63,19 @@ public class GreenPrintCLI extends Application {
     }
 
     public static void main(String[] args) throws IOException {
+
+        tracker.addEntry(new EnergyEmission("E001", "Energy", "2024-06-01", "Alice", 15.0, "Grid"));
+        tracker.addEntry(new FoodEmission("F002", "Food", "2024-06-01", "Alice", "Vegetarian", 2));
+        tracker.addEntry(new FoodEmission("F001", "Food", "2024-06-01", "Bob", "Vegan", 3));
+        tracker.addEntry(new TransportationEmission("T002", "Transportation", "2024-06-01", "Bob", 15.0, "Bus"));
+        tracker.addEntry(new TransportationEmission("T001", "Transportation", "2024-06-01", "Charlie", 10.0, "Car"));
+        tracker.addEntry(new EnergyEmission("E002", "Energy", "2024-06-01", "Charlie", 25.0, "solar"));
+        tracker.addEntry(new TransportationEmission("T003", "Transportation", "2024-06-01", "Jacob", 10.0, "Car"));
+        tracker.addEntry(new FoodEmission("F003", "Food", "2024-06-01", "Jacob", "poultry", 2));
+        tracker.addEntry(new EnergyEmission("E003", "Energy", "2024-06-01", "Jacob", 15.0, "Grid"));
+
+        tracker.generateDailyReport();
+        System.out.println("User with highest total emissions: " + tracker.getHighestTotalEmissionUser());
 
         
         // Launch the JavaFX application
