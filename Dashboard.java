@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -302,14 +301,23 @@ public class Dashboard extends Application {
      */
 
     public static ScrollPane createDashboard() {
+        
         VBox content = new VBox(10);
 
-        content.getChildren().addAll(
+
+        if (GreenPrintCLI.tracker.getTotalEntries() == 0) {
+            Label noDataLabel = makeLabel("No Emission Data Added Yet! \n\n Please add entries in the Data Operations tab.");
+            content.getChildren().add(noDataLabel);
+            
+        } else {
+
+            content.getChildren().addAll(
             MakeTitleLabel("Dashboard Overview"),
             createDashboardContent(),
             MakeTitleLabel("Emission Entries"),
             GenerateEmissionEntries()
-        );
+            );
+        }
 
         ScrollPane scrollPane = new ScrollPane(content);
         scrollPane.setFitToWidth(true);

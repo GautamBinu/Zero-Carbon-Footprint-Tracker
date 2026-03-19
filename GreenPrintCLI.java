@@ -21,8 +21,12 @@ public class GreenPrintCLI extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("GreenPrint CLI");
-        
-        
+
+        // Save state when window closes
+        primaryStage.setOnCloseRequest(event -> {
+            Logger.saveState();
+        });
+
         // Create the TabPane
         TabPane tabPane = new TabPane();
         
@@ -73,18 +77,8 @@ public class GreenPrintCLI extends Application {
 
     public static void main(String[] args) throws IOException {
 
-        tracker.addEntry(new EnergyEmission("E-001", "Energy", "2024-06-01", "Alice", 15.0, "Grid"));
-        tracker.addEntry(new FoodEmission("F-002", "Food", "2024-06-01", "Alice", "Vegetarian", 2));
-        tracker.addEntry(new FoodEmission("F-001", "Food", "2024-06-01", "Bob", "Vegan", 3));
-        tracker.addEntry(new TransportationEmission("T-002", "Transportation", "2024-06-01", "Bob", 15.0, "Bus"));
-        tracker.addEntry(new TransportationEmission("T-001", "Transportation", "2024-06-01", "Charlie", 10.0, "Car"));
-        tracker.addEntry(new EnergyEmission("E-002", "Energy", "2024-06-01", "Charlie", 25.0, "solar"));
-        tracker.addEntry(new TransportationEmission("T-003", "Transportation", "2024-06-01", "Jacob", 10.0, "Car"));
-         tracker.addEntry(new FoodEmission("F-003", "Food", "2024-06-01", "Jacob", "poultry", 2));
-        tracker.addEntry(new EnergyEmission("E-003", "Energy", "2024-06-01", "Jacob", 15.0, "Grid"));
-
-        tracker.generateDailyReport();
-        System.out.println("User with highest total emissions: " + tracker.getHighestTotalEmissionUser());
+        // Load saved state on startup
+        Logger.loadState();
 
         
         // Launch the JavaFX application

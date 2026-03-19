@@ -6,8 +6,7 @@ import java.util.List;
 
 
 public class EmissionIDValidator extends GreenPrintCLI {
-    //EXTENDS some class eventually
-     static final String LOG_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_log.txt";
+    
 
     public static int ValidateFinal(String input,ArrayList<String> id_list){
         //String input will be replaced with textfield input from GUI
@@ -25,38 +24,8 @@ public class EmissionIDValidator extends GreenPrintCLI {
     }
     public static int ValidateFinal(String input) throws IOException {
         
-        ArrayList<String> id_list = new ArrayList<>(extractID());
+        ArrayList<String> id_list = new ArrayList<>(tracker.extractID());
         return ValidateFinal(input, id_list);
-    }
-
-    public static List<String> extractID() throws IOException{
-        List<String> id_list= new ArrayList<>();
-
-        try(
-                FileReader reader1= new FileReader(LOG_FILE);
-                BufferedReader reader2= new BufferedReader(reader1);){
-            String line;
-
-            while ((line= reader2.readLine()) !=null){
-                String[] parts= line.split(":",3);
-                if (parts.length <2){
-                    continue;
-                }
-
-                String details= parts[1];
-                String[] detailsParts= details.split("\\|", 3);
-                if (detailsParts.length==0){
-                    continue;
-                }
-                String id= detailsParts[0].trim();
-                if (id.matches("[EFT]-\\d{3}")){
-                    id_list.add(id);
-                }
-            }
-        }
-       
-        return id_list;
-
     }
 }
 

@@ -345,7 +345,7 @@ public class DataOperationIO extends Application {
         // Create fields for energy emissions
         HBox CreateIDField = CreateEmissionTypeTextField("E");
         TextField kwhField = CreateTextField("Enter KWH Used");
-        ComboBox<String> energySourceComboBox = CreateComboBox("Select Energy Source", "Grid", "Solar", "Wind", "Hydro");
+        ComboBox<String> energySourceComboBox = CreateComboBox("Select Energy Source", "Grid", "Solar", "Wind");
         Button addButton = CreateButton("ADD Energy Emissions");
         Label errorLabel =  ErrorLabel("");
         Label successLabel = SuccessLabel("");

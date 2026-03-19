@@ -1,5 +1,7 @@
 
 import java.util.ArrayList;
+import java.util.List;
+
 
 
 /**
@@ -11,6 +13,7 @@ public class FootprintTracker {
     private String trackerName;
     private ArrayList<EmissionSource> emissions;
     Logger log = new Logger();
+    
    
 
     /**
@@ -22,6 +25,14 @@ public class FootprintTracker {
     public FootprintTracker() {
         this.trackerName = "RIT GreenPrint 2026";
         this.emissions = new ArrayList<>();
+    }
+
+    public ArrayList<EmissionSource> getEmissions() {
+    return this.emissions;
+}
+
+    public void setEmissions(ArrayList<EmissionSource> loadedEmissions) {
+    this.emissions = loadedEmissions;
     }
 
     /**
@@ -39,7 +50,7 @@ public class FootprintTracker {
         }
     }
 
-    /**
+        /**
      *   Returns the total number of emission entries currently being tracked by this FootprintTracker instance, which is determined by the size of the emissions list. This method provides a way to quickly assess how many entries have been added to the tracker without needing to access the list directly.
      * @return the total number of emission entries currently being tracked by this FootprintTracker instance, which is determined by the size of the emissions list.
      */
@@ -79,6 +90,21 @@ public class FootprintTracker {
             System.err.println("An Error Occurred while calculating total emissions: " + e.getMessage());
             return 0.0; // Return 0.0 in case of an error to indicate that the total emissions could not be calculated.
         }
+    }
+    
+
+    public List<String> extractID() {
+        List<String> id_list= new ArrayList<>();
+
+        for (EmissionSource entry : emissions) {
+            String id = entry.getSourceID();
+            if (id.matches("[EFT]-\\d{3}")) {
+                id_list.add(id);
+            }
+        }
+
+        return id_list;
+
     }
 
     /**
@@ -166,7 +192,7 @@ public class FootprintTracker {
         // Get unique users
         ArrayList<String> users = getUniqueUsers();
         
-        double grandTotal = 0.0;
+        
         
         // Print emissions grouped by user
         for (String user : users) {
@@ -196,5 +222,7 @@ public class FootprintTracker {
 }
 
    
+
+
 
 }
