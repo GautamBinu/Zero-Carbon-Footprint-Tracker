@@ -38,54 +38,11 @@ public class Dashboard extends Application {
 
 
     /**
-     * Creates the title section of the dashboard with a styled label.
-     * @return a VBox containing the dashboard title label, styled with a larger font size, bold weight, green text color, and padding for spacing. The VBox is centered to ensure the title is prominently displayed at the top of the dashboard.
-     */
-    public static VBox Title() {
-
-
-        Label titleLabel = new Label("Dashboard Overview");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: green; -fx-padding: 20px;");
-
-        VBox content = new VBox(10);
-        content.setAlignment(Pos.CENTER);
-       
-        content.getChildren().addAll(titleLabel);
-
-        return content;
-    }
-
-    /**
-     * Creates the main content section of the dashboard, which includes three key metrics: total entries, total emissions, and the user with the highest emissions. Each metric is displayed in a styled label with a white background, green border, rounded corners, and bold text. The labels are arranged horizontally with spacing between them and are designed to grow with the window size for better responsiveness. This section provides users with a quick overview of their carbon footprint data at a glance.
-     * @return an HBox containing the three metric labels, styled and arranged for a visually
-     */
-
-    public static HBox createDashboardContent() {
-        HBox dashboardContent = new HBox(15); // Reduced spacing between boxes
-        dashboardContent.setPadding(new Insets(20));
-        dashboardContent.setAlignment(Pos.CENTER);
-
-        // Create labels
-        Label totalEntriesLabel = makeLabel("Total Entries: \n\n" + GreenPrintCLI.tracker.getTotalEntries());
-        Label totalEmissionsLabel = makeLabel(String.format("Total Emissions:  \n\n %.2f kg CO2", GreenPrintCLI.tracker.GetTotalEmissions()));
-        Label highestUserLabel = makeLabel("Highest Emissions User: \n\n" + GreenPrintCLI.tracker.getHighestTotalEmissionUser());
-
-        // Make labels grow with window size
-        HBox.setHgrow(totalEntriesLabel, Priority.ALWAYS);
-        HBox.setHgrow(totalEmissionsLabel, Priority.ALWAYS);
-        HBox.setHgrow(highestUserLabel, Priority.ALWAYS);
-
-        dashboardContent.getChildren().addAll(totalEntriesLabel, totalEmissionsLabel, highestUserLabel);
-
-        return dashboardContent;
-    }
-    /**
      * Creates the title for the emission entries section of the dashboard with a styled label.
      * @return a VBox containing the "Emission Entries" title label, styled with a larger font size, bold weight, green text color, and padding for spacing. The VBox is centered to ensure the title is prominently displayed above the list of emission entries in the dashboard.
      */
-
-    public static VBox EmissionEntriesTitle() {
-        Label label = new Label("Emission Entries");
+    public static VBox MakeTitleLabel(String string) {
+        Label label = new Label(string);
         label.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: green; -fx-padding: 20px;");
         VBox content = new VBox(10);
         content.setAlignment(Pos.CENTER);
@@ -93,7 +50,6 @@ public class Dashboard extends Application {
         return content;
     }
 
-    
 
     /**
      * Helper method to create a styled label for the dashboard metrics. The label is designed with a white background, green border, rounded corners, bold text, and padding for better visual appeal. It also allows the label to grow with the window size for improved responsiveness. This method is used to create the labels for total entries, total emissions, and the highest emissions user in the dashboard overview section.
@@ -101,7 +57,7 @@ public class Dashboard extends Application {
      * @return a styled Label object with the specified text, designed for use in the dashboard metrics section, providing a consistent and visually appealing format for displaying key information to users.
      */
 
-    private static Label makeLabel(String string) {
+    public static Label makeLabel(String string) {
         Label label = new Label(string);
 
         label.setAlignment(Pos.CENTER);
@@ -129,6 +85,33 @@ public class Dashboard extends Application {
         label.setPrefHeight(180);  
 
         return label;
+    }
+
+
+    
+    /**
+     * Creates the main content section of the dashboard, which includes three key metrics: total entries, total emissions, and the user with the highest emissions. Each metric is displayed in a styled label with a white background, green border, rounded corners, and bold text. The labels are arranged horizontally with spacing between them and are designed to grow with the window size for better responsiveness. This section provides users with a quick overview of their carbon footprint data at a glance.
+     * @return an HBox containing the three metric labels, styled and arranged for a visually
+     */
+
+    public static HBox createDashboardContent() {
+        HBox dashboardContent = new HBox(15); // Reduced spacing between boxes
+        dashboardContent.setPadding(new Insets(20));
+        dashboardContent.setAlignment(Pos.CENTER);
+
+        // Create labels
+        Label totalEntriesLabel = makeLabel("Total Entries: \n\n" + GreenPrintCLI.tracker.getTotalEntries());
+        Label totalEmissionsLabel = makeLabel(String.format("Total Emissions:  \n\n %.2f kg CO2", GreenPrintCLI.tracker.GetTotalEmissions()));
+        Label highestUserLabel = makeLabel("Highest Emissions User: \n\n" + GreenPrintCLI.tracker.getHighestTotalEmissionUser());
+
+        // Make labels grow with window size
+        HBox.setHgrow(totalEntriesLabel, Priority.ALWAYS);
+        HBox.setHgrow(totalEmissionsLabel, Priority.ALWAYS);
+        HBox.setHgrow(highestUserLabel, Priority.ALWAYS);
+
+        dashboardContent.getChildren().addAll(totalEntriesLabel, totalEmissionsLabel, highestUserLabel);
+
+        return dashboardContent;
     }
 
     /**
@@ -285,10 +268,7 @@ public class Dashboard extends Application {
     }
 
    
-    /**
-     * Generates the detailed emission entries section of the dashboard, which lists all emission entries grouped by user. For each user, a label is created to display the user's name, followed by a FlowPane that contains labels for each of the user's emission entries. Each entry label is styled with a background color that reflects the magnitude of the emission (green for low, yellow for medium, red for high) and includes an event handler that shows a detailed alert with the entry's information when clicked. This method provides users with an organized and interactive way to view their individual emission entries on the dashboard.
-     * @return a VBox containing the user labels and their corresponding emission entry labels, styled and arranged for clarity and interactivity, allowing users to easily navigate through their emission data on the dashboard.
-     */
+    /** */
     public static VBox GenerateEmissionEntries() {
         VBox entriesBox = new VBox(20);
         entriesBox.setPadding(new Insets(20));
@@ -325,9 +305,9 @@ public class Dashboard extends Application {
         VBox content = new VBox(10);
 
         content.getChildren().addAll(
-            Title(),
+            MakeTitleLabel("Dashboard Overview"),
             createDashboardContent(),
-            EmissionEntriesTitle(),
+            MakeTitleLabel("Emission Entries"),
             GenerateEmissionEntries()
         );
 

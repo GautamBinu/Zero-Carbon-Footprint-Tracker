@@ -7,18 +7,14 @@ import java.util.List;
 
 public class EmissionIDValidator extends GreenPrintCLI {
     //EXTENDS some class eventually
-     static String LOG_FILE;
-
-    public EmissionIDValidator(){
-        this.LOG_FILE="Zero-Carbon-Footprint-Tracker/greenprint_log.txt";
-    }
+     static final String LOG_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_log.txt";
 
     public static int ValidateFinal(String input,ArrayList<String> id_list){
         //String input will be replaced with textfield input from GUI
         if (!input.equals(input.toUpperCase())){
             return 1;    // "1" refers to entered letter not being uppercase error
         }
-        if(!input.matches("[EFT]\\d{3}")){
+        if(!input.matches("[EFT]-\\d{3}")){
             return 2;    // "2" refers to pattern not matching error
         }
         if(id_list.contains(input)){
@@ -53,7 +49,7 @@ public class EmissionIDValidator extends GreenPrintCLI {
                     continue;
                 }
                 String id= detailsParts[0].trim();
-                if (id.matches("[EFT]\\d{3}")){
+                if (id.matches("[EFT]-\\d{3}")){
                     id_list.add(id);
                 }
             }

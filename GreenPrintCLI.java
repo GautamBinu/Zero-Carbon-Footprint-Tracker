@@ -16,6 +16,7 @@ import javafx.geometry.Insets;
 public class GreenPrintCLI extends Application {
 
     static FootprintTracker tracker = new FootprintTracker();
+    static Tab dashboardTab;
 
     @Override
     public void start(Stage primaryStage) {
@@ -40,13 +41,14 @@ public class GreenPrintCLI extends Application {
         tabPane.setSide(Side.BOTTOM);
 
         // Create the Dashboard tab
-        Tab dashboardTab = new Tab();
+        dashboardTab = new Tab();
         dashboardTab.setText("Dashboard");
         dashboardTab.setContent(Dashboard.createDashboard());
         
         // Create the Data Operations tab
         Tab dataOpsTab = new Tab();
         dataOpsTab.setText("Data Operations");
+        dataOpsTab.setContent(DataOperationIO.DataOperationsTab());
         
         
         // Create the Offset Transactions tab
@@ -62,17 +64,24 @@ public class GreenPrintCLI extends Application {
         primaryStage.show();
     }
 
+    public static void refreshDashboard() {
+        if (dashboardTab != null) {
+            dashboardTab.setContent(Dashboard.createDashboard());
+        }
+       
+    }
+
     public static void main(String[] args) throws IOException {
 
-        tracker.addEntry(new EnergyEmission("E001", "Energy", "2024-06-01", "Alice", 15.0, "Grid"));
-        tracker.addEntry(new FoodEmission("F002", "Food", "2024-06-01", "Alice", "Vegetarian", 2));
-        tracker.addEntry(new FoodEmission("F001", "Food", "2024-06-01", "Bob", "Vegan", 3));
-        tracker.addEntry(new TransportationEmission("T002", "Transportation", "2024-06-01", "Bob", 15.0, "Bus"));
-        tracker.addEntry(new TransportationEmission("T001", "Transportation", "2024-06-01", "Charlie", 10.0, "Car"));
-        tracker.addEntry(new EnergyEmission("E002", "Energy", "2024-06-01", "Charlie", 25.0, "solar"));
-        tracker.addEntry(new TransportationEmission("T003", "Transportation", "2024-06-01", "Jacob", 10.0, "Car"));
-        tracker.addEntry(new FoodEmission("F003", "Food", "2024-06-01", "Jacob", "poultry", 2));
-        tracker.addEntry(new EnergyEmission("E003", "Energy", "2024-06-01", "Jacob", 15.0, "Grid"));
+        tracker.addEntry(new EnergyEmission("E-001", "Energy", "2024-06-01", "Alice", 15.0, "Grid"));
+        tracker.addEntry(new FoodEmission("F-002", "Food", "2024-06-01", "Alice", "Vegetarian", 2));
+        tracker.addEntry(new FoodEmission("F-001", "Food", "2024-06-01", "Bob", "Vegan", 3));
+        tracker.addEntry(new TransportationEmission("T-002", "Transportation", "2024-06-01", "Bob", 15.0, "Bus"));
+        tracker.addEntry(new TransportationEmission("T-001", "Transportation", "2024-06-01", "Charlie", 10.0, "Car"));
+        tracker.addEntry(new EnergyEmission("E-002", "Energy", "2024-06-01", "Charlie", 25.0, "solar"));
+        tracker.addEntry(new TransportationEmission("T-003", "Transportation", "2024-06-01", "Jacob", 10.0, "Car"));
+         tracker.addEntry(new FoodEmission("F-003", "Food", "2024-06-01", "Jacob", "poultry", 2));
+        tracker.addEntry(new EnergyEmission("E-003", "Energy", "2024-06-01", "Jacob", 15.0, "Grid"));
 
         tracker.generateDailyReport();
         System.out.println("User with highest total emissions: " + tracker.getHighestTotalEmissionUser());

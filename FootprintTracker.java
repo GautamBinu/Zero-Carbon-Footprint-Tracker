@@ -33,7 +33,7 @@ public class FootprintTracker {
             
 
              emissions.add(entry);
-             log.log("STATE_SAVED", entry.toString());
+             log.log("ENTRY_ADDED", entry.toString());
         } catch (Exception e) {
             System.err.println("An Error Occurred while adding an entry: " + e.getMessage());
         }
