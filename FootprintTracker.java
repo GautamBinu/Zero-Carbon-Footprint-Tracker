@@ -219,10 +219,9 @@ public class FootprintTracker {
         System.err.println("An Error Occurred while generating the report: " + e.getMessage());
     }
 
+
+
 }
 
    
-
-
-
 }

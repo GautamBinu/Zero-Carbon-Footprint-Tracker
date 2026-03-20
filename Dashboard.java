@@ -94,7 +94,7 @@ public class Dashboard extends Application {
      */
 
     public static HBox createDashboardContent() {
-        HBox dashboardContent = new HBox(15); // Reduced spacing between boxes
+        HBox dashboardContent = new HBox(15); 
         dashboardContent.setPadding(new Insets(20));
         dashboardContent.setAlignment(Pos.CENTER);
 

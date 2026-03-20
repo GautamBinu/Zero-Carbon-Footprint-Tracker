@@ -9,3 +9,6 @@ FOOD|F-003|Food|2024-06-01|jacob|poultry|2
 ENERGY|E-003|Energy|2024-06-01|jacob|15.00|grid
 ENERGY|E-008|Energy|2026-03-20|bob|67.00|wind
 TRANSPORT|T-087|Transportation|2026-03-20|gautam|34.00|Train
+ENERGY|E-009|Energy|2026-03-20|gautam|56.00|wind
+ENERGY|E-019|Energy|2026-03-20|dhruvvv|56.00|wind
+FOOD|F-052|Food|2026-03-21|dhruvvv|vegetarian|8

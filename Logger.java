@@ -8,17 +8,13 @@ import java.util.ArrayList;
 
 public class Logger {
 
-    
-    private final String LOG_FILE;
-    private static String STATE_FILE;
 
-    public Logger() {
-        // Constructor can be used to initialize any necessary resources or configurations for the logger if needed.
-        this.LOG_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_log.txt";
-        this.STATE_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_save_state.txt";
+    private static String LOG_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_log.txt";
+    private static String STATE_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_save_state.txt";
 
-    }
+  
 
+ 
     
 
     public void log(String operation, String details) {
@@ -111,9 +107,29 @@ public class Logger {
 
             GreenPrintCLI.tracker.setEmissions(emissions);
 
+        
+
         } catch (IOException e) {
             System.err.println("Error loading state: " + e.getMessage());
         }
+
+
+        
     }
+
+    public static ArrayList<String> filterOperation(String operation) {
+            ArrayList<String> filtered = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(LOG_FILE))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.contains("{" + operation + "}")) {
+                        filtered.add(line);
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Error reading log file: " + e.getMessage());
+            }
+            return filtered;
+        }
 
 }

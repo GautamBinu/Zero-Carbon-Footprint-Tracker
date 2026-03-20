@@ -1,5 +1,4 @@
 import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -58,6 +57,7 @@ public class GreenPrintCLI extends Application {
         // Create the Offset Transactions tab
         Tab offsetTab = new Tab();
         offsetTab.setText("Offset Transactions");
+        offsetTab.setContent(OffsetTransactionGUI.createOffsetTabPane());
         
         // Add tabs to the TabPane
         tabPane.getTabs().addAll(dashboardTab, dataOpsTab, offsetTab);
