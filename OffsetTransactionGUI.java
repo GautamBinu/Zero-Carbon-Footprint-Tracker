@@ -7,6 +7,6 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Side;
 import javafx.geometry.Pos;
 
-public class OffsetTransactionGUI {  
-    
+public class OffsetTransactionGUI extends Application {  
+  
 }
