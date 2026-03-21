@@ -13,3 +13,6 @@ ENERGY|E-009|Energy|2026-03-21|gautam|56.00|wind
 ENERGY|E-019|Energy|2026-03-21|dhruv|56.00|solar
 FOOD|F-052|Food|2026-03-21|dhruv|vegetarian|8
 TRANSPORT|T-563|Transportation|2026-03-21|gautam|67.00|Car
+TRANSPORT|T-520|Transportation|2026-03-22|rayyan mir|78.00|Train
+ENERGY|E-520|Energy|2026-03-22|rayyan mir|3.74|solar
+FOOD|F-952|Food|2026-03-22|rayyan mir|poultry|3

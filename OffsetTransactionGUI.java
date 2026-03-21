@@ -17,24 +17,33 @@ public class OffsetTransactionGUI {  // No longer extends Application
     static String InvalidBorderStyle = DataOperationIO.InvalidBorderStyle;
     static String ScrollPaneStyle = "-fx-background: white; -fx-background-color: white;";
 
+    /**
+     * Rounds a double value to 2 decimal places. This method is used to ensure that the emission amounts and costs displayed in the GUI are consistent with the precision shown to the user, avoiding issues with floating-point representation that could lead to validation errors when comparing user input against total emissions.
+     * @param value
+     * @return the input value rounded to 2 decimal places
+     */
+
     private static double roundTo2Decimals(double value) {
         return Math.round(value * 100.0) / 100.0;
     }
 
-
+    /**
+     * Creates the input box for offset transactions, which includes a user selection dropdown, a label to display the user's total emissions, a text field for entering the amount of emissions to offset, a payment method dropdown, a label to display the calculated price, and a submit button. The method also includes validation for user input and updates the price label dynamically as the user enters the emission amount. When the submit button is clicked, it validates the input, shows a processing message, simulates a delay, logs the purchase, refreshes the offset log tab, and displays a receipt page with the transaction details.
+     * @return a VBox containing the input elements for offset transactions
+     */
     public static VBox createOffsetInputBox() {
         VBox inputBox = new VBox(10);
         inputBox.setPadding(new Insets(20));
         inputBox.setAlignment(Pos.CENTER);
         inputBox.setSpacing(10);
-        ArrayList<String> users = GreenPrintCLI.tracker.getUniqueUsers();
+        ArrayList<String> users = GreenPrintGUI.tracker.getUniqueUsers();
 
         // Create UI elements
         ComboBox<String> Users_ComboBox = DataOperationIO.CreateComboBox("Select User", users.toArray(new String[0]));
         
         // Refresh user list when dropdown is opened to show newly added users
         Users_ComboBox.setOnShowing(event -> {
-            ArrayList<String> updatedUsers = GreenPrintCLI.tracker.getUniqueUsers();
+            ArrayList<String> updatedUsers = GreenPrintGUI.tracker.getUniqueUsers();
             Users_ComboBox.getItems().setAll(updatedUsers);
         });
         
@@ -48,7 +57,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
         // Update label when user is selected
         Users_ComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                double totalEmissions = GreenPrintCLI.tracker.GetTotalEmissionsForUser(newValue);
+                double totalEmissions = GreenPrintGUI.tracker.GetTotalEmissionsForUser(newValue);
                 userEmissionsLabel.setText(String.format("%s Total Emissions: \n\n %.2f kg CO2", newValue, totalEmissions));
             } else {
                 userEmissionsLabel.setText("Select a user to view emissions");
@@ -95,7 +104,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
                     EmissionInput.setStyle(InvalidBorderStyle);
                     isValid = false;
                 } else if (selectedUser != null) {
-                    double userTotalEmissions = GreenPrintCLI.tracker.GetTotalEmissionsForUser(selectedUser);
+                    double userTotalEmissions = GreenPrintGUI.tracker.GetTotalEmissionsForUser(selectedUser);
                     // Compare against the same precision shown in the UI to avoid floating-point mismatch.
                     double allowedMax = roundTo2Decimals(userTotalEmissions);
                     if (emissionAmount > allowedMax) {
@@ -158,6 +167,11 @@ public class OffsetTransactionGUI {  // No longer extends Application
         return inputBox;
     }
 
+    /**
+     * Displays the receipt page after a successful offset transaction. The receipt includes details of the transaction such as the date, time, user name, emission type, weight of emissions offset, amount offset per kilogram of CO2, total cost of the offset, payment method, and a confirmation status. The receipt is displayed in a styled TextArea within a ScrollPane, and includes a button to navigate back to the offset purchase page for users who wish to purchase more offsets.
+     * @param receipt
+     */
+
     public static void showReceiptPage(String receipt) {
         VBox receiptBox = new VBox(20);
         receiptBox.setPadding(new Insets(40));
@@ -204,7 +218,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
         VBox content = new VBox(10);
         content.getChildren().addAll(
                 Dashboard.MakeTitleLabel("Offset Emissions Transactions"),
-                Dashboard.makeLabel(String.format("Total Emissions: \n\n %.2f kg CO2", GreenPrintCLI.tracker.GetTotalEmissions())),
+                Dashboard.makeLabel(String.format("Total Emissions: \n\n %.2f kg CO2", GreenPrintGUI.tracker.GetTotalEmissions())),
                 createOffsetInputBox()
                 
         );
@@ -215,7 +229,10 @@ public class OffsetTransactionGUI {  // No longer extends Application
     }
 
 
-
+    /**
+     * Creates the offset log tab, which displays a list of all offset purchase transactions logged in the system. The method retrieves log entries related to offset purchases, formats them for display, and adds them to a VBox container. If there are no offset purchases logged, it displays a message indicating that no offsets have been purchased yet. The content is wrapped in a ScrollPane to allow for easy navigation through the log entries.
+     * @return a ScrollPane containing the offset purchase log
+     */
     public static ScrollPane CreateOffsetLogTab() {
         VBox OffsetsContainer = new VBox(10);
         OffsetsContainer.setPadding(new Insets(20));
@@ -240,12 +257,15 @@ public class OffsetTransactionGUI {  // No longer extends Application
     }   
     
 
-
+    /**
+     * Creates the main content for the Offset Transactions tab, which includes a title, a label displaying the total emissions, and the input box for purchasing offsets. The content is wrapped in a ScrollPane to allow for easy navigation, especially when the input box contains multiple elements. This method serves as the factory for generating the complete GUI for the Offset Transactions tab in the application.
+     * @return a ScrollPane containing the main content for the Offset Transactions tab
+     */
 
     public static TabPane createOffsetTabPane() {
         TabPane OffsetTabPane = new TabPane();
         OffsetTabPane.setStyle(
-            "-fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif; " +
+            GreenPrintGUI.FontFamily +
             "-fx-font-size: 12px; " +
             "-fx-font-weight: bold;"
         );

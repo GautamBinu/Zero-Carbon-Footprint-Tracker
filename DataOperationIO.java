@@ -1,3 +1,10 @@
+/**
+ * DataOperationIO.java
+ * This class is responsible for handling the user interface and logic for the "Data Operations" tab in the GreenPrint CLI application. It provides functionality for adding new users and their associated emission entries, as well as searching for existing users and their emissions. The class utilizes JavaFX components to create an interactive and user-friendly interface that allows users to input their data, receive validation feedback, and view their emissions in an organized manner. It also includes methods for creating styled UI elements such as buttons, text fields, combo boxes, and labels to maintain a consistent aesthetic throughout the application.
+ * 
+ */
+
+
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -13,12 +20,17 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 
+/**
+ * 
+ * This class is responsible for handling the user interface and logic for the "Data Operations" tab in the GreenPrint CLI application. It provides functionality for adding new users and their associated emission entries, as well as searching for existing users and their emissions. The class utilizes JavaFX components to create an interactive and user-friendly interface that allows users to input their data, receive validation feedback, and view their emissions in an organized manner. It also includes methods for creating styled UI elements such as buttons, text fields, combo boxes, and labels to maintain a consistent aesthetic throughout the application.
+ */
+
 public class DataOperationIO extends Application {
 
       public static TabPane DataOperationsTab() {
         TabPane dataOpsTab = new TabPane();
         dataOpsTab.setStyle(
-            "-fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif; " +
+            GreenPrintGUI.FontFamily +
             "-fx-font-size: 12px; " + 
             "-fx-font-weight: bold;"
         );
@@ -41,6 +53,11 @@ public class DataOperationIO extends Application {
 
         return dataOpsTab;
     }
+
+    /**
+     * Creates the user interface for searching users and their associated emission entries in the "Data Operations" tab. The interface includes a text field for entering the user name to search, a search button, and a status label for displaying success or error messages. When the search button is clicked, the method validates the input, searches for entries matching the user name, and dynamically generates labels for each found entry. The results are displayed in a dedicated container below the search controls, providing users with an organized view of their emissions based on the searched user name.
+     * @return a VBox containing the search controls and the dynamically generated results for the searched user, styled and organized for a user-friendly experience.
+     */
 
     public static VBox SearchUserTab() {
         VBox searchBox = new VBox(10);
@@ -70,7 +87,7 @@ public class DataOperationIO extends Application {
             }
 
             // 2. Search for entries matching the user name
-            for (EmissionSource entry : GreenPrintCLI.tracker.getEntriesByUser(userNameToSearch)) {
+            for (EmissionSource entry : GreenPrintGUI.tracker.getEntriesByUser(userNameToSearch)) {
                 if (entry.getUserName().equalsIgnoreCase(userNameToSearch)) {
                     // Create a label for this specific entry and add it to the container
                     resultsContainer.getChildren().add(Dashboard.makeLabel(entry.toString()));
@@ -102,7 +119,7 @@ public class DataOperationIO extends Application {
     /**
      * Styles for passive UI elements
      */
-    static String PassiveStyle = "-fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif; " +
+    static String PassiveStyle = GreenPrintGUI.FontFamily +
         "-fx-font-size: 12px; " +
         "-fx-font-weight: bold;" +
         "-fx-background-color: #ffffff; " +
@@ -120,6 +137,12 @@ public class DataOperationIO extends Application {
     static String sharedDate = "";
     static Tab AddUserTab;
 
+    /**
+     * Creates a styled error label with a red text color and bold font weight, designed to provide clear and visually distinct feedback to users when an error occurs. This method is used throughout the "Data Operations" tab to display error messages in a consistent and attention-grabbing manner, helping users quickly identify issues with their input or actions.
+     * @param message
+     * @return a Label object styled to indicate an error, containing the provided message text.
+     */
+
 
     public static Label ErrorLabel(String message) {
         Label errorLabel = new Label(message);
@@ -127,11 +150,20 @@ public class DataOperationIO extends Application {
         return errorLabel;
     }
 
+    /**
+     * Creates a styled success label with a green text color and bold font weight, designed to provide clear and visually distinct feedback to users when an action is successful. This method is used throughout the "Data Operations" tab to display success messages in a consistent and positive manner, helping users quickly recognize when their input or actions have been processed correctly.
+     * @param message
+     * @return a Label object styled to indicate success, containing the provided message text.
+     */
     public static Label SuccessLabel(String message) {
         Label successLabel = new Label(message);
         successLabel.setStyle(ValidStyle);
         return successLabel;
     }
+
+    /**
+     * Creates the initial user interface for adding a new user and their associated emission entries in the "Data Operations" tab. The interface includes fields for entering the user's name and the date of the emission entries, as well as buttons to navigate to specific forms for adding energy, food, or transportation emissions. The method also handles the shared data (user name and date) that will be used across the different emission entry forms, ensuring that this information is accessible when users navigate between them. This initial box serves as the starting point for users to input their data and access the various forms for adding their emissions.
+     */
 
     @Override
     public void start(Stage arg0) throws Exception {
@@ -140,6 +172,11 @@ public class DataOperationIO extends Application {
     }
 
   
+    /**
+     * Creates a styled button with a consistent design, including a specific font size, text color, border color, and dimensions to enhance the user interface of the "Data Operations" tab. This method is used to generate buttons for various actions such as searching for users or adding emission entries, ensuring that all buttons across the application maintain a cohesive and visually appealing style.
+     * @param text
+     * @return a Button object styled with the defined design parameters, containing the provided text as its label.
+     */
 
     public static Button CreateButton(String text) {
         Button button = new Button(text);
@@ -154,6 +191,12 @@ public class DataOperationIO extends Application {
         return button;
     }
 
+    /**
+     * Creates a styled ComboBox with a consistent design, including a specific font size, text color, border color, and dimensions to enhance the user interface of the "Data Operations" tab. This method is used to generate combo boxes for selecting options such as energy sources or vehicle types, ensuring that all combo boxes across the application maintain a cohesive and visually appealing style.
+     * @param prompt
+     * @param options
+     * @return a ComboBox<String> object styled with the defined design parameters, containing the provided options and displaying the specified prompt text when no selection has been made.
+     */
     public static ComboBox<String> CreateComboBox(String prompt, String... options) {
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setStyle(PassiveStyle);
@@ -164,6 +207,11 @@ public class DataOperationIO extends Application {
         return comboBox;
     }
 
+    /**
+     * Creates a styled TextField with a consistent design, including a specific font size, text color, border color, and dimensions to enhance the user interface of the "Data Operations" tab. This method is used to generate text fields for inputting data such as user names, dates, or emission values, ensuring that all text fields across the application maintain a cohesive and visually appealing style.
+     * @param prompt
+     * @return a TextField object styled with the defined design parameters, displaying the specified prompt text when the field is empty and ready for user input.
+     */
    public static TextField CreateTextField(String prompt) {
         TextField textField = new TextField();
         textField.setStyle(PassiveStyle);
@@ -172,6 +220,11 @@ public class DataOperationIO extends Application {
         textField.setPromptText(prompt);
         return textField;
     }
+
+    /**
+     * Creates a "Back" button that, when clicked, navigates the user back to the initial box for adding users and their associated emission entries in the "Data Operations" tab. This button is styled consistently with other buttons in the application and is designed to provide a clear and easy way for users to return to the main input screen after navigating to specific forms for adding energy, food, or transportation emissions.
+     * @return a Button object styled as a "Back" button, with an event handler that sets the content of the AddUserTab back to the initial box when clicked.
+     */
 
     public static Button CreateBackButtonToInitialBox() {
         Button backButton = CreateButton("Back");
@@ -183,7 +236,11 @@ public class DataOperationIO extends Application {
     }
 
   
-
+    /**
+     * Creates a styled HBox containing a label and a text field for entering an emission ID, along with a validation label that provides real-time feedback on the validity of the entered ID. The method takes a string parameter that represents the beginning character of the emission ID (e.g., "E" for energy, "F" for food, "T" for transportation) and constructs the full ID format for validation. The validation logic checks the entered ID against predefined rules and updates the validation label to indicate whether the ID is valid or invalid, providing users with immediate feedback as they input their data.
+     * @param BeginningCharacter
+     * @return an HBox containing the prefix label, the text field for ID input, and the validation label, all styled and organized to provide a user-friendly interface for entering and validating emission IDs in the "Data Operations" tab.
+     */
     public static HBox CreateEmissionTypeTextField(String BeginningCharacter) {
     HBox hbox = new HBox(10);
     
@@ -242,6 +299,11 @@ public class DataOperationIO extends Application {
         datePicker.setPrefHeight(45); // Matched height with TextField
         return datePicker;
     }
+
+    /**
+     * Creates the initial user interface for adding a new user and their associated emission entries in the "Data Operations" tab. The interface includes fields for entering the user's name and the date of the emission entries, as well as buttons to navigate to specific forms for adding energy, food, or transportation emissions. The method also handles the shared data (user name and date) that will be used across the different emission entry forms, ensuring that this information is accessible when users navigate between them. This initial box serves as the starting point for users to input their data and access the various forms for adding their emissions.
+     * @return a VBox containing the input fields for user name and date, as well as buttons to navigate to the specific emission entry forms, all styled and organized to provide a user-friendly interface for adding new users and their emissions in the "Data Operations" tab.
+     */
 
     public static VBox TransportationEmissionsFields() {
         VBox transportationBox = new VBox(10);
@@ -322,11 +384,11 @@ public class DataOperationIO extends Application {
                     distance,
                     vehicleType
                 );
-                GreenPrintCLI.tracker.addEntry(emission);
+                GreenPrintGUI.tracker.addEntry(emission);
                 successLabel.setText("✓ Transportation Emission added successfully!");
 
                 // Refresh the dashboard to show the new data
-                GreenPrintCLI.refreshDashboard();
+                GreenPrintGUI.refreshDashboard();
 
                 // Clear fields for next entry
                 AddUserTab.setContent(InitialBox("✓ Transportation Emission added successfully!"));
@@ -349,7 +411,10 @@ public class DataOperationIO extends Application {
     }
 
     
-
+    /**
+     * Creates the user interface for adding energy emissions in the "Data Operations" tab. This interface includes fields for entering the emission ID, the amount of energy used in KWH, and the energy source. It also includes validation logic to ensure that the input data is correct before allowing the user to add the emission entry to the tracker. Upon successful addition, the dashboard is refreshed to reflect the new entry, and feedback is provided to the user through success or error messages. This method provides a structured and user-friendly way for users to input their energy emissions data into the application.
+     * @return a VBox containing the input fields for energy emissions, along with validation and feedback mechanisms, all styled and organized to provide a user-friendly interface for adding energy emissions in the "Data Operations" tab.
+     */
     public static VBox EnergyEmissionsFields() {
         VBox energyBox = new VBox(10);
         energyBox.setAlignment(Pos.CENTER);
@@ -426,11 +491,11 @@ public class DataOperationIO extends Application {
                     kwh,
                     energySource
                 );
-                GreenPrintCLI.tracker.addEntry(emission);
+                GreenPrintGUI.tracker.addEntry(emission);
                 successLabel.setText("✓ Energy Emission added successfully!");
 
                 // Refresh the dashboard to show the new data
-                GreenPrintCLI.refreshDashboard();
+                GreenPrintGUI.refreshDashboard();
 
                 // Clear fields for next entry
                 AddUserTab.setContent(InitialBox("✓ Energy Emission added successfully!"));
@@ -454,6 +519,10 @@ public class DataOperationIO extends Application {
         return energyBox;
     }
 
+    /**
+     * Creates the user interface for adding food emissions in the "Data Operations" tab.
+     * @return a VBox containing the input fields for food emissions, along with validation and feedback mechanisms, all styled and organized to provide a user-friendly interface for adding food emissions in the "Data Operations" tab.
+     */
     public static VBox FoodEmissionsFields() {
         VBox foodBox = new VBox(10);
         foodBox.setAlignment(Pos.CENTER);
@@ -530,9 +599,9 @@ public class DataOperationIO extends Application {
                     mealType,
                     meals
                 );
-                GreenPrintCLI.tracker.addEntry(emission);
+                GreenPrintGUI.tracker.addEntry(emission);
 
-                GreenPrintCLI.refreshDashboard();
+                GreenPrintGUI.refreshDashboard();
 
                 // Clear fields for next entry
                 AddUserTab.setContent(InitialBox("✓ Food Emission added successfully!"));
@@ -558,7 +627,10 @@ public class DataOperationIO extends Application {
     }
     
 
-    // Overload for backward compatibility
+    /**
+     * Creates the initial user interface for adding a new user and their associated emission entries in the "Data Operations" tab. The interface includes fields for entering the user's name and the date of the emission entries, as well as buttons to navigate to specific forms for adding energy, food, or transportation emissions. The method also handles the shared data (user name and date) that will be used across the different emission entry forms, ensuring that this information is accessible when users navigate between them. This initial box serves as the starting point for users to input their data and access the various forms for adding their emissions.
+     * @return a VBox containing the input fields for user name and date, as well as buttons to navigate to the specific emission entry forms, all styled and organized to provide a user-friendly interface for adding new users and their emissions in the "Data Operations" tab.
+     */
     public static VBox InitialBox() {
         return InitialBox(null);
     }

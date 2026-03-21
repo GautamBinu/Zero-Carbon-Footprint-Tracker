@@ -27,10 +27,18 @@ public class FootprintTracker {
         this.emissions = new ArrayList<>();
     }
 
+    /**
+     * Returns the list of emission entries currently being tracked by this FootprintTracker instance.
+     * @return the list of emission entries currently being tracked by this FootprintTracker instance.
+     */
     public ArrayList<EmissionSource> getEmissions() {
     return this.emissions;
 }
 
+    /**
+     * Sets the list of emission entries for this FootprintTracker instance to the provided list. This method allows for updating the emissions being tracked, such as when loading saved data or replacing the current list with a new set of entries.
+     * @param loadedEmissions the new list of emission entries that will replace the current list of emissions being tracked by this FootprintTracker instance.
+     */
     public void setEmissions(ArrayList<EmissionSource> loadedEmissions) {
     this.emissions = loadedEmissions;
     }
@@ -92,6 +100,11 @@ public class FootprintTracker {
         }
     }
     
+    /**
+     * Extracts the source IDs from the emission entries being tracked and returns them as a list of strings. This method iterates through the emissions list, retrieves the sourceID from each entry, checks if it matches the required pattern (EFT-XXX), and adds it to the id_list if it does. The returned list contains all valid source IDs currently being tracked by this FootprintTracker instance, which can be used for validation purposes when adding new entries to ensure that IDs are unique and follow the correct format.
+     * @return a list of valid source IDs currently being tracked by this FootprintTracker instance, extracted from the emission entries in the emissions list and filtered to include only those that match the required pattern (EFT-XXX).
+     * 
+     */
 
     public List<String> extractID() {
         List<String> id_list= new ArrayList<>();

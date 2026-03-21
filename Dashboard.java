@@ -1,3 +1,10 @@
+/**
+ * Dashboard.java
+ * This class is responsible for creating the user interface for the dashboard tab in the GreenPrint CLI application. It provides methods to generate the dashboard content, including an overview section with total entries, total emissions, and the user with the highest emissions, as well as a detailed section that lists all emission entries grouped by user. The class utilizes JavaFX components to create a visually appealing and interactive dashboard that allows users to view their carbon footprint data in an organized manner.
+ * 
+ */
+
+
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -32,7 +39,7 @@ public class Dashboard extends Application {
      @Override
 
    public void start(Stage primaryStage) {
-        // This method is intentionally left blank as the main application logic is handled in GreenPrintCLI
+        // This method is intentionally left blank as the main application logic is handled in GUI
         }
 
 
@@ -99,9 +106,9 @@ public class Dashboard extends Application {
         dashboardContent.setAlignment(Pos.CENTER);
 
         // Create labels
-        Label totalEntriesLabel = makeLabel("Total Entries: \n\n" + GreenPrintCLI.tracker.getTotalEntries());
-        Label totalEmissionsLabel = makeLabel(String.format("Total Emissions:  \n\n %.2f kg CO2", GreenPrintCLI.tracker.GetTotalEmissions()));
-        Label highestUserLabel = makeLabel("Highest Emissions User: \n\n" + GreenPrintCLI.tracker.getHighestTotalEmissionUser());
+        Label totalEntriesLabel = makeLabel("Total Entries: \n\n" + GreenPrintGUI.tracker.getTotalEntries());
+        Label totalEmissionsLabel = makeLabel(String.format("Total Emissions:  \n\n %.2f kg CO2", GreenPrintGUI.tracker.GetTotalEmissions()));
+        Label highestUserLabel = makeLabel("Highest Emissions User: \n\n" + GreenPrintGUI.tracker.getHighestTotalEmissionUser());
 
         // Make labels grow with window size
         HBox.setHgrow(totalEntriesLabel, Priority.ALWAYS);
@@ -129,12 +136,11 @@ public class Dashboard extends Application {
         return emissionPane;
     }
 
-        /**
-        * Creates a label for an individual emission entry, styled with a background color that reflects the magnitude of the emission (green for low, yellow for medium, red for high) and includes an event handler that shows a detailed alert with the entry's information when clicked. This method is used to generate the labels for each emission entry in the detailed section of the dashboard, providing users with an interactive way to view their emission data and understand the specifics of each entry by clicking on it.
-        * @param entry
-        * @return a styled Label object representing an individual emission entry, designed to visually indicate the magnitude of the emission and provide interactivity for users to access detailed information about the entry through an alert dialog.
-        */
-
+    /**
+     * Creates a styled label for a user's name in the dashboard, designed to visually separate the user's section from their emission entries. The label features a white background, black border, rounded corners, bold text, and green text color to maintain the overall aesthetic of the dashboard. This method is used to generate the labels for each user in the detailed section of the dashboard, providing a clear and visually appealing way to group emission entries by user.
+     * @param user
+     * @return
+     */
     public static Label UserEntryLabel(String user) {
         Label userLabel = new Label(user);
 
@@ -231,7 +237,7 @@ public class Dashboard extends Application {
 
         // Row 3: Dynamic Emission Details (e.g., KWH, Grid type, or Food type)
         Label specificLbl = new Label("Specifics:"); specificLbl.setStyle(headerStyle);
-        Label specificVal = new Label(GreenPrintCLI.tracker.TypeofEmission(entry)); 
+        Label specificVal = new Label(GreenPrintGUI.tracker.TypeofEmission(entry)); 
         specificVal.setStyle(valueStyle);
         grid.addRow(3, specificLbl, specificVal);
 
@@ -267,19 +273,22 @@ public class Dashboard extends Application {
     }
 
    
-    /** */
+    /**
+     * Generates the detailed emission entries section of the dashboard, which lists all emission entries grouped by user. For each user, a label is created to display the user's name, followed by a FlowPane that contains labels for each of the user's emission entries. Each entry label is styled with a background color that reflects the magnitude of the emission (green for low, yellow for medium, red for high) and includes an event handler that shows a detailed alert with the entry's information when clicked. This method provides users with an organized and interactive way to view their individual emission entries on the dashboard.
+     * @return a VBox containing the user labels and their corresponding emission entry labels, styled and
+     */
     public static VBox GenerateEmissionEntries() {
         VBox entriesBox = new VBox(20);
         entriesBox.setPadding(new Insets(20));
         entriesBox.setAlignment(Pos.CENTER);
         try{
-            ArrayList<String> users = GreenPrintCLI.tracker.getUniqueUsers();
+            ArrayList<String> users = GreenPrintGUI.tracker.getUniqueUsers();
             for (String user : users) {
                 Label userLabel = UserEntryLabel(user);
                 entriesBox.getChildren().add(userLabel);
                 FlowPane userEmissionsPane = createUserEntriesFlowPane();
 
-                for (EmissionSource entry : GreenPrintCLI.tracker.getEntriesByUser(user)) {
+                for (EmissionSource entry : GreenPrintGUI.tracker.getEntriesByUser(user)) {
                     Label emissionLabel = EmissionEntryLabel(entry);
                     userEmissionsPane.getChildren().add(emissionLabel);
                 }
@@ -305,7 +314,7 @@ public class Dashboard extends Application {
         VBox content = new VBox(10);
 
 
-        if (GreenPrintCLI.tracker.getTotalEntries() == 0) {
+        if (GreenPrintGUI.tracker.getTotalEntries() == 0) {
             Label noDataLabel = makeLabel("No Emission Data Added Yet! \n\n Please add entries in the Data Operations tab.");
             content.getChildren().add(noDataLabel);
             
@@ -327,6 +336,6 @@ public class Dashboard extends Application {
     }
 
     public static void main(String[] args) {
-       // This method is intentionally left blank as the main application logic is handled in GreenPrintCLI
+       // This method is intentionally left blank as the main application logic is handled in GreenPrintGUI
     }
 }

@@ -1,3 +1,10 @@
+/**
+ * Logger.java
+ * This class is responsible for logging operations performed within the GreenPrint CLI application, as well as
+ * saving and loading the application state. It provides methods to log specific operations with details, save the current state of emissions to a file, and load the state from a file when the application starts. The logging functionality helps track user actions and changes made to the emissions data, while the state management ensures that users can persist their data across sessions.
+ */
+
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,7 +25,11 @@ public class Logger {
   
 
  
-    
+    /**
+     * Logs an operation with its details to the log file. Each log entry includes the operation name, details, and a timestamp of when the operation was performed. The log is appended to the existing log file, allowing for a historical record of actions taken within the application. This method is used throughout the application to track significant events and changes to the emissions data, providing a way to review past actions and debug issues if necessary.
+     * @param operation
+     * @param details
+     */
 
     public static void log(String operation, String details) {
         try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
@@ -39,7 +50,7 @@ public class Logger {
      */
     public static void saveState() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(STATE_FILE))) {
-            for (EmissionSource entry : GreenPrintCLI.tracker.getEmissions()) {
+            for (EmissionSource entry : GreenPrintGUI.tracker.getEmissions()) {
                 String line = "";
                 if (entry instanceof EnergyEmission energy) {
                     line = String.format("ENERGY|%s|%s|%s|%s|%.2f|%s",
@@ -110,7 +121,7 @@ public class Logger {
                 }
             }
 
-            GreenPrintCLI.tracker.setEmissions(emissions);
+            GreenPrintGUI.tracker.setEmissions(emissions);
 
         
 
@@ -122,6 +133,11 @@ public class Logger {
         
     }
 
+    /**
+     * Filters log entries based on a specific operation.
+     * @param operation the operation to filter by
+     * @return a list of filtered log entries
+     */
     public static ArrayList<String> filterOperation(String operation) {
             ArrayList<String> filtered = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new FileReader(LOG_FILE))) {
