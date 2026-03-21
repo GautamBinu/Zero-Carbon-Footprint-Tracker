@@ -1,47 +1,10 @@
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.collections.FXCollections;
-import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.*;
-import java.util.PriorityQueue;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.stage.Stage;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.logging.Handler;
-import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.input.MouseEvent;
 import javafx.geometry.Side;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 public class OffsetTransactionGUI {  // No longer extends Application
@@ -54,7 +17,9 @@ public class OffsetTransactionGUI {  // No longer extends Application
     static String InvalidBorderStyle = DataOperationIO.InvalidBorderStyle;
     static String ScrollPaneStyle = "-fx-background: white; -fx-background-color: white;";
 
-   
+    private static double roundTo2Decimals(double value) {
+        return Math.round(value * 100.0) / 100.0;
+    }
 
 
     public static VBox createOffsetInputBox() {
@@ -66,6 +31,13 @@ public class OffsetTransactionGUI {  // No longer extends Application
 
         // Create UI elements
         ComboBox<String> Users_ComboBox = DataOperationIO.CreateComboBox("Select User", users.toArray(new String[0]));
+        
+        // Refresh user list when dropdown is opened to show newly added users
+        Users_ComboBox.setOnShowing(event -> {
+            ArrayList<String> updatedUsers = GreenPrintCLI.tracker.getUniqueUsers();
+            Users_ComboBox.getItems().setAll(updatedUsers);
+        });
+        
         Label userEmissionsLabel = Dashboard.makeLabel("Select a user to view emissions");
         TextField EmissionInput = DataOperationIO.CreateTextField("Enter Emission Amount to Offset (kg CO2)");
         ComboBox<String> Payment_ComboBox = DataOperationIO.CreateComboBox("Payment Method", "Credit Card", "Digital Wallet", "Campus Card");
@@ -124,7 +96,9 @@ public class OffsetTransactionGUI {  // No longer extends Application
                     isValid = false;
                 } else if (selectedUser != null) {
                     double userTotalEmissions = GreenPrintCLI.tracker.GetTotalEmissionsForUser(selectedUser);
-                    if (emissionAmount > userTotalEmissions) {
+                    // Compare against the same precision shown in the UI to avoid floating-point mismatch.
+                    double allowedMax = roundTo2Decimals(userTotalEmissions);
+                    if (emissionAmount > allowedMax) {
                         errorMsg.append("✗ Emission Amount cannot exceed Total Emissions\n");
                         EmissionInput.setStyle(InvalidBorderStyle);
                         isValid = false;
@@ -163,10 +137,10 @@ public class OffsetTransactionGUI {  // No longer extends Application
             PauseTransition pause = new PauseTransition(Duration.seconds(2));
             pause.setOnFinished(e -> {
                 // Log the purchase
-                Logger logger = new Logger();
+                
                 String logDetails = String.format("User: %s | Amount: %.2f kg CO2 | Cost: $%.2f | Payment: %s",
-                    selectedUser, finalEmissionAmount, Offsets.calculateOffsetCost(finalEmissionAmount), paymentMethod);
-                logger.log("OFFSET_PURCHASED", logDetails);
+                selectedUser, finalEmissionAmount, Offsets.calculateOffsetCost(finalEmissionAmount), paymentMethod);
+                Logger.log("OFFSET_PURCHASED", logDetails);
 
                 // Refresh the Offset Log tab to show the new purchase
                 if (currentOffsetLogTab != null) {
@@ -250,8 +224,13 @@ public class OffsetTransactionGUI {  // No longer extends Application
         OffsetsContainer.getChildren().add(Dashboard.MakeTitleLabel("Offset Purchase Log"));
 
         // Get and display offset purchase logs
-        for (String entry : Logger.filterOperation("OFFSET_PURCHASED")) {
-            OffsetsContainer.getChildren().add(Dashboard.makeLabel(entry));
+        ArrayList<String> offsetEntries = Logger.filterOperation("OFFSET_PURCHASED");
+        if (offsetEntries.isEmpty()) {
+            OffsetsContainer.getChildren().add(Dashboard.makeLabel("no Offsets Purchased Yet"));
+        } else {
+            for (String entry : offsetEntries) {
+                OffsetsContainer.getChildren().add(Dashboard.makeLabel(entry));
+            }
         }
 
         ScrollPane scrollPane = new ScrollPane(OffsetsContainer);

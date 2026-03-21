@@ -4,13 +4,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.geometry.Side;
-import javafx.geometry.Insets;
+
 
 public class GreenPrintCLI extends Application {
 

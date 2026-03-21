@@ -24,12 +24,12 @@ public class Offsets {
                 "User: %s\n" +
                 "Emission Type: %s\n" +
                 "Weigh offset: %.2f kg CO2\n" +
-                "Amount Offset per Kg CO2: %f AED\n" +
+                "Amount Offset per Kg CO2: %.3f AED\n" +
                 "Total Cost: $%.2f AED\n" +
                 "Payment Method: %s\n" +
                 "Status: Confirmation - Transaction Successful!" +
                 "\nThank you for your contribution to a greener planet!\n" +
-                "<- RECEIPT END ->\n",
+                "<- RECEIPT END ->",
 
                 java.time.LocalDate.now(), java.time.LocalTime.now(), userName, "All Emission Types", EmissionsKg, offset_rate_per_kg, calculateOffsetCost(EmissionsKg), paymentMethod
         );

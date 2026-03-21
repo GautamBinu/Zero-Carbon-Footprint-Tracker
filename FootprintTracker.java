@@ -175,7 +175,7 @@ public class FootprintTracker {
             double userEmission = GetTotalEmissionsForUser(user);
             if (userEmission > highestEmission) { highestEmission = userEmission; highestUser = user; }
         }
-        return highestUser + " " + "(" + highestEmission + " kg CO2)";
+        return String.format("%s (%.2f kg CO2)", highestUser, highestEmission);
     }
 
 

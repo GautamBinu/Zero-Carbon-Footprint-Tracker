@@ -4,7 +4,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.text.ListFormat.Style;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -174,6 +173,17 @@ public class DataOperationIO extends Application {
         return textField;
     }
 
+    public static Button CreateBackButtonToInitialBox() {
+        Button backButton = CreateButton("Back");
+        backButton.setMaxWidth(100);
+        backButton.setOnAction(e -> {
+            AddUserTab.setContent(InitialBox());
+        });
+        return backButton;
+    }
+
+  
+
     public static HBox CreateEmissionTypeTextField(String BeginningCharacter) {
     HBox hbox = new HBox(10);
     
@@ -243,6 +253,7 @@ public class DataOperationIO extends Application {
         ComboBox<String> vehicleTypeComboBox = CreateComboBox("Select Vehicle Type", "Car", "Bus", "Train", "Cycle");
         Button addButton = CreateButton("ADD Transportation Emissions");
         addButton.setMaxWidth(350);
+        
        
         Label errorLabel =  ErrorLabel("");
         Label successLabel = SuccessLabel("");
@@ -331,7 +342,8 @@ public class DataOperationIO extends Application {
             vehicleTypeComboBox,
             errorLabel,
             successLabel,
-            addButton
+            addButton,
+            CreateBackButtonToInitialBox()
         );
         return transportationBox;
     }
@@ -435,7 +447,8 @@ public class DataOperationIO extends Application {
             energySourceComboBox,
             errorLabel,
             successLabel,
-            addButton
+            addButton,
+            CreateBackButtonToInitialBox()
         );
 
         return energyBox;
@@ -537,7 +550,8 @@ public class DataOperationIO extends Application {
             mealTypeComboBox,
             errorLabel,
             successLabel,
-            addButton
+            addButton,
+            CreateBackButtonToInitialBox()
         );
 
         return foodBox;
