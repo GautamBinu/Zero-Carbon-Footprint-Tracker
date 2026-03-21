@@ -1,4 +1,4 @@
-import org.junit.platform.reporting.shadow.org.opentest4j.reporting.events.core.UserName;
+
 
 /**
  * The EmissionSource class is an abstract class that serves as a blueprint for different types of emission sources, such as transportation, energy, and food. It contains common attributes like sourceID, category, date, and userName, along with an abstract method calculateEmission() that must be implemented by subclasses to calculate the specific emissions based on their unique attributes.

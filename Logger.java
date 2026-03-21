@@ -4,16 +4,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Logger {
 
 
-    private static String LOG_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_log.txt";
-    private static String STATE_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_save_state.txt";
+    private static String LOG_FILE = "/Users/dhruvmer/Desktop/zeroocarbon/Zereeooo/Zero-Carbon-Footprint-Tracker-main/greenprint_log.txt";
+    private static String STATE_FILE = "/Users/dhruvmer/Desktop/zeroocarbon/Zereeooo/Zero-Carbon-Footprint-Tracker-main/greenprint_save_state.txt";
 
   
 
@@ -23,9 +20,8 @@ public class Logger {
     public static void log(String operation, String details) {
         try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
 
-            String date = LocalDate.now().toString();
-            String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-            writer.write(String.format("{%s} : %s : [%s | %s]\n", operation, details, date, time));
+
+            writer.write(String.format("{%s} : %s : [%s]\n", operation, details, java.time.LocalDateTime.now().toString()));
             writer.flush();
 
         } catch (IOException e) {
@@ -56,7 +52,6 @@ public class Logger {
                 }
                 if (!line.isEmpty()) {
                     writer.write(line);
-                    log("STATE_SAVED", line);
                     writer.newLine();
                 }
             }

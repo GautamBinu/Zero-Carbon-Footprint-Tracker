@@ -1,21 +1,40 @@
-import java.io.IOException;
-import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.Tab;
-import javafx.geometry.Side;
+/**
+ * Main application class that initializes and manages the GreenPrint application.
+ * Serves as the entry point and holds the global tracker instance.
+ */
+public class GreenPrintCLI {
+    public static FootprintTracker tracker;
+    private static Logger logger;
 
-
-public class GreenPrintCLI extends Application {
-
-    
- 
-
-    public static void main(String[] args) throws IOException {
-
+    static {
+        // Initialize the tracker and logger
+        tracker = new FootprintTracker();
+        logger = new Logger();
         
+        // Load any previously saved state
+        Logger.loadState();
+    }
+
+    /**
+     * Gets the global tracker instance
+     * @return the FootprintTracker instance
+     */
+    public static FootprintTracker getTracker() {
+        return tracker;
+    }
+
+    /**
+     * Gets the logger instance
+     * @return the Logger instance
+     */
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    /**
+     * Saves the current state to file
+     */
+    public static void saveApplication() {
+        Logger.saveState();
     }
 }
-
- 
