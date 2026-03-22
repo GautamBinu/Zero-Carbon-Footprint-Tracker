@@ -12,7 +12,7 @@ import java.util.List;
 public class FootprintTracker {
     private String trackerName;
     private ArrayList<EmissionSource> emissions;
-    Logger log = new Logger();
+    
     
    
 
@@ -52,7 +52,7 @@ public class FootprintTracker {
             
 
              emissions.add(entry);
-             log.log("ENTRY_ADDED", entry.toString());
+             Logger.log("ENTRY_ADDED", entry.toString());
         } catch (Exception e) {
             System.err.println("An Error Occurred while adding an entry: " + e.getMessage());
         }

@@ -34,13 +34,9 @@ import javafx.geometry.Pos;
  * The Dashboard class is responsible for creating the user interface for the dashboard tab in the GreenPrint CLI application. It provides methods to generate the dashboard content, including an overview section with total entries, total emissions, and the user with the highest emissions, as well as a detailed section that lists all emission entries grouped by user. The class utilizes JavaFX components to create a visually appealing and interactive dashboard that allows users to view their carbon footprint data in an organized manner.
  */
 
-public class Dashboard extends Application {
+public class Dashboard {
 
-     @Override
-
-   public void start(Stage primaryStage) {
-        // This method is intentionally left blank as the main application logic is handled in GUI
-        }
+    
 
 
     /**
@@ -354,7 +350,5 @@ public class Dashboard extends Application {
         return scrollPane;
     }
 
-    public static void main(String[] args) {
-       // This method is intentionally left blank as the main application logic is handled in GreenPrintGUI
-    }
+  
 }

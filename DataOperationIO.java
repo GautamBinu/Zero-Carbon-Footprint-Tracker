@@ -25,7 +25,37 @@ import javafx.scene.control.Tab;
  * This class is responsible for handling the user interface and logic for the "Data Operations" tab in the GreenPrint CLI application. It provides functionality for adding new users and their associated emission entries, as well as searching for existing users and their emissions. The class utilizes JavaFX components to create an interactive and user-friendly interface that allows users to input their data, receive validation feedback, and view their emissions in an organized manner. It also includes methods for creating styled UI elements such as buttons, text fields, combo boxes, and labels to maintain a consistent aesthetic throughout the application.
  */
 
-public class DataOperationIO extends Application {
+public class DataOperationIO {
+
+
+     /**
+     * Styles for passive UI elements
+     */
+    static String PassiveStyle = GreenPrintGUI.FontFamily +
+        "-fx-font-size: 12px; " +
+        "-fx-font-weight: bold;" +
+        "-fx-background-color: #ffffff; " +
+        "-fx-border-color: #004d27; " +
+        "-fx-border-radius: 8px; " + // Added curved border
+        "-fx-background-radius: 8px;"; // Adjust this number to increase/decrease the gap
+
+
+    static String ValidStyle = "-fx-text-fill: green; -fx-font-weight: bold; -fx-font-size: 14px;";
+    static String InvalidStyle = "-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 14px;";
+    static String InvalidBorderStyle = PassiveStyle + "-fx-border-color: red; -fx-border-width: 2px;";
+
+    // Store shared data from InitialBox
+    static String sharedUserName = "";
+    static String sharedDate = "";
+    static Tab AddUserTab;
+
+    /**
+     * Creates a styled error label with a red text color and bold font weight, designed to provide clear and visually distinct feedback to users when an error occurs. This method is used throughout the "Data Operations" tab to display error messages in a consistent and attention-grabbing manner, helping users quickly identify issues with their input or actions.
+     * @param message
+     * @return a Label object styled to indicate an error, containing the provided message text.
+     */
+
+    
 
       public static TabPane DataOperationsTab() {
         TabPane dataOpsTab = new TabPane();
@@ -116,32 +146,7 @@ public class DataOperationIO extends Application {
         return searchBox;
 }
 
-    /**
-     * Styles for passive UI elements
-     */
-    static String PassiveStyle = GreenPrintGUI.FontFamily +
-        "-fx-font-size: 12px; " +
-        "-fx-font-weight: bold;" +
-        "-fx-background-color: #ffffff; " +
-        "-fx-border-color: #004d27; " +
-        "-fx-border-radius: 8px; " + // Added curved border
-        "-fx-background-radius: 8px;"; // Adjust this number to increase/decrease the gap
-
-
-    static String ValidStyle = "-fx-text-fill: green; -fx-font-weight: bold; -fx-font-size: 14px;";
-    static String InvalidStyle = "-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 14px;";
-    static String InvalidBorderStyle = PassiveStyle + "-fx-border-color: red; -fx-border-width: 2px;";
-
-    // Store shared data from InitialBox
-    static String sharedUserName = "";
-    static String sharedDate = "";
-    static Tab AddUserTab;
-
-    /**
-     * Creates a styled error label with a red text color and bold font weight, designed to provide clear and visually distinct feedback to users when an error occurs. This method is used throughout the "Data Operations" tab to display error messages in a consistent and attention-grabbing manner, helping users quickly identify issues with their input or actions.
-     * @param message
-     * @return a Label object styled to indicate an error, containing the provided message text.
-     */
+   
 
 
     public static Label ErrorLabel(String message) {
@@ -165,11 +170,7 @@ public class DataOperationIO extends Application {
      * Creates the initial user interface for adding a new user and their associated emission entries in the "Data Operations" tab. The interface includes fields for entering the user's name and the date of the emission entries, as well as buttons to navigate to specific forms for adding energy, food, or transportation emissions. The method also handles the shared data (user name and date) that will be used across the different emission entry forms, ensuring that this information is accessible when users navigate between them. This initial box serves as the starting point for users to input their data and access the various forms for adding their emissions.
      */
 
-    @Override
-    public void start(Stage arg0) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'start'");
-    }
+   
 
   
     /**
