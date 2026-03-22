@@ -32,6 +32,9 @@ public class GreenPrintGUI extends Application {
     public void start(Stage primaryStage) {
         this.tracker = GreenPrintCLI.getTracker();
 
+        // Load previously saved offsets from log file
+        loadTotalOffsetsFromLog();
+
         // Initialize all panels
         initializePanels();
 
@@ -296,6 +299,13 @@ public class GreenPrintGUI extends Application {
      */
     public static void resetTotalOffsets() {
         totalOffsetsAdded = 0;
+    }
+
+    /**
+     * Loads total offsets from the log file on startup
+     */
+    public static void loadTotalOffsetsFromLog() {
+        totalOffsetsAdded = Logger.loadTotalOffsetsFromLog();
     }
 
     public static void main(String[] args) {

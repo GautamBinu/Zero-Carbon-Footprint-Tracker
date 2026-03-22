@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class Logger {
 
 
-    private static String LOG_FILE = "/Users/dhruvmer/Desktop/zeroocarbon/Zereeooo/Zero-Carbon-Footprint-Tracker-main/greenprint_log.txt";
-    private static String STATE_FILE = "/Users/dhruvmer/Desktop/zeroocarbon/Zereeooo/Zero-Carbon-Footprint-Tracker-main/greenprint_save_state.txt";
+    private static String LOG_FILE = "/Users/dhruvmer/Desktop/newAIcarbonemissoin/greenprint_log.txt";
+    private static String STATE_FILE = "/Users/dhruvmer/Desktop/newAIcarbonemissoin/greenprint_save_state.txt";
 
   
 
@@ -131,5 +131,60 @@ public class Logger {
             }
             return filtered;
         }
+
+    /**
+     * Loads total offsets from the log file by summing all OFFSET_PURCHASED entries.
+     * Log format: {OFFSET_PURCHASED} : User|Amount|Cost|Payment : [timestamp]
+     * @return total offset amount in kg
+     */
+    public static double loadTotalOffsetsFromLog() {
+        File file = new File(LOG_FILE);
+        if (!file.exists() || file.length() == 0) {
+            return 0.0;
+        }
+
+        double totalOffsets = 0.0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(LOG_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("{OFFSET_PURCHASED}")) {
+                    // Extract the details part between the first : and last :
+                    // Format: {OFFSET_PURCHASED} : User: X | Amount: Y kg CO2 | Cost: $Z | Payment: M : [timestamp]
+                    int startIdx = line.indexOf(":");
+                    int endIdx = line.lastIndexOf(":");
+                    
+                    if (startIdx != -1 && endIdx != -1 && startIdx < endIdx) {
+                        String details = line.substring(startIdx + 1, endIdx).trim();
+                        
+                        // Split by pipe and find the Amount part
+                        String[] parts = details.split("\\|");
+                        for (String part : parts) {
+                            part = part.trim();
+                            if (part.startsWith("Amount:")) {
+                                try {
+                                    // Extract the numeric value from "Amount: 50.00 kg CO2"
+                                    // Remove "Amount:" prefix and " kg CO2" suffix
+                                    String amountStr = part.replace("Amount:", "").trim();
+                                    // Remove " kg CO2" or similar suffix
+                                    if (amountStr.contains(" ")) {
+                                        amountStr = amountStr.substring(0, amountStr.indexOf(" ")).trim();
+                                    }
+                                    double amount = Double.parseDouble(amountStr);
+                                    totalOffsets += amount;
+                                } catch (NumberFormatException e) {
+                                    System.err.println("Error parsing offset amount from: " + part);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading total offsets: " + e.getMessage());
+        }
+
+        return totalOffsets;
+    }
 
 }

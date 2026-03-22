@@ -12,3 +12,9 @@ TRANSPORT|T-087|Transportation|2026-03-20|gautam|34.00|Train
 ENERGY|E-009|Energy|2026-03-20|gautam|56.00|wind
 ENERGY|E-019|Energy|2026-03-20|dhruvvv|56.00|wind
 FOOD|F-052|Food|2026-03-21|dhruvvv|vegetarian|8
+ENERGY|E-123|Energy|2026-03-22|gautammm|123123.00|grid
+ENERGY|E-124|Energy|2026-03-22|gma|1234.00|grid
+FOOD|F-123|Food|2026-03-22|akfmaelkf|vegetarian|25000
+ENERGY|E-125|Energy|2026-03-22|lkmglekmg|1000000000.00|grid
+ENERGY|E-126|Energy|2026-03-22|gweg|100000.00|grid
+ENERGY|E-127|Energy|2026-03-22|grrg|10000000000.00|grid

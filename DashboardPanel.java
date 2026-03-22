@@ -27,6 +27,7 @@ public class DashboardPanel {
 
     // Statistics cards
     private Label totalEmissionsLabel;
+    private Label netEmissionsLabel;
     private Label totalEntriesLabel;
     private Label uniqueUsersLabel;
     private Label highestEmitterLabel;
@@ -100,21 +101,8 @@ public class DashboardPanel {
         grid.setPadding(new Insets(15));
         grid.setSpacing(15);
 
-        // Total Emissions Card
-        VBox card1 = createStatCard(
-            "📊 Net Emissions",
-            () -> {
-                double total = tracker.GetTotalEmissions();
-                double offsets = GreenPrintGUI.getTotalOffsetsAdded();
-                double net = Math.max(0, total - offsets);
-                String offsetsInfo = offsets > 0 ? String.format(" (%.2f kg offset)", offsets) : "";
-                if (net == 0 && offsets > 0) {
-                    return String.format("✅ NEUTRAL%.0s", offsetsInfo);
-                }
-                return String.format("%.2f kg CO2%s", net, offsetsInfo);
-            },
-            "#e74c3c"
-        );
+        // Combined Emissions Card (Total & Net)
+        VBox card1 = createEmissionsComparisonCard();
 
         // Total Entries Card
         VBox card2 = createStatCard(
@@ -140,7 +128,6 @@ public class DashboardPanel {
             "#f39c12"
         );
 
-        totalEmissionsLabel = (Label) card1.getChildren().get(1);
         totalEntriesLabel = (Label) card2.getChildren().get(1);
         uniqueUsersLabel = (Label) card3.getChildren().get(1);
         highestEmitterLabel = (Label) card4.getChildren().get(1);
@@ -152,6 +139,45 @@ public class DashboardPanel {
         HBox.setHgrow(card4, Priority.ALWAYS);
 
         return grid;
+    }
+
+    /**
+     * Creates a combined emissions card showing both total and net emissions
+     */
+    private VBox createEmissionsComparisonCard() {
+        VBox card = new VBox(15);
+        card.setPadding(new Insets(20));
+        card.setStyle("-fx-background-color: white; -fx-border-color: #2ecc71; -fx-border-width: 3; -fx-border-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+        
+        Label titleLabel = new Label("💨 Emissions Summary");
+        titleLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #555;");
+        
+        // Total Emissions Section
+        VBox totalSection = new VBox(5);
+        totalSection.setStyle("-fx-padding: 10; -fx-background-color: #f8f9fa; -fx-border-radius: 5;");
+        Label totalTitleLabel = new Label("Total Emissions");
+        totalTitleLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #7f8c8d;");
+        totalEmissionsLabel = new Label("0.00 kg CO2");
+        totalEmissionsLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
+        totalSection.getChildren().addAll(totalTitleLabel, totalEmissionsLabel);
+        
+        // Net Emissions Section
+        VBox netSection = new VBox(5);
+        netSection.setStyle("-fx-padding: 10; -fx-background-color: #f0fdf4; -fx-border-radius: 5;");
+        Label netTitleLabel = new Label("Net Emissions");
+        netTitleLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #7f8c8d;");
+        netEmissionsLabel = new Label("0.00 kg CO2");
+        netEmissionsLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2ecc71;");
+        netSection.getChildren().addAll(netTitleLabel, netEmissionsLabel);
+        
+        // Create a horizontal layout for emissions sections
+        HBox emissionsLayout = new HBox(10);
+        emissionsLayout.getChildren().addAll(totalSection, netSection);
+        HBox.setHgrow(totalSection, Priority.ALWAYS);
+        HBox.setHgrow(netSection, Priority.ALWAYS);
+        
+        card.getChildren().addAll(titleLabel, emissionsLayout);
+        return card;
     }
 
     /**
@@ -565,8 +591,24 @@ public class DashboardPanel {
     public void refresh() {
         // Update all statistics with latest data
         if (totalEmissionsLabel != null) {
-            totalEmissionsLabel.setText(String.format("%.2f kg CO2", tracker.GetTotalEmissions()));
+            double totalEmissions = tracker.GetTotalEmissions();
+            totalEmissionsLabel.setText(String.format("%.2f kg CO2", totalEmissions));
         }
+        
+        if (netEmissionsLabel != null) {
+            double total = tracker.GetTotalEmissions();
+            double offsets = GreenPrintGUI.getTotalOffsetsAdded();
+            double net = Math.max(0, total - offsets);
+            
+            if (net == 0 && offsets > 0) {
+                netEmissionsLabel.setText("✅ NEUTRAL");
+                netEmissionsLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #27ae60;");
+            } else {
+                netEmissionsLabel.setText(String.format("%.2f kg CO2", net));
+                netEmissionsLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2ecc71;");
+            }
+        }
+        
         if (totalEntriesLabel != null) {
             totalEntriesLabel.setText(String.valueOf(tracker.getTotalEntries()));
         }
