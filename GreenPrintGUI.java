@@ -11,6 +11,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.control.Tab;
 import javafx.geometry.Side;
 
@@ -29,6 +30,7 @@ public class GreenPrintGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("GreenPrint GUI");
+        primaryStage.getIcons().add(new Image("icon.png"));
 
         // Save state when window closes
         primaryStage.setOnCloseRequest(event -> {

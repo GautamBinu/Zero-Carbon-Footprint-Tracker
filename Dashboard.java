@@ -93,6 +93,21 @@ public class Dashboard extends Application {
         return label;
     }
 
+    public static String getEmissionStatus() {
+    double emissions = OffsetTransactionGUI.roundTo2Decimals(GreenPrintGUI.tracker.GetTotalEmissions());
+    double offsets = OffsetTransactionGUI.roundTo2Decimals(Logger.CalculateTotalOffsetAmount());
+    double net = emissions - offsets;
+
+    if (emissions == offsets) {
+        return "Carbon Neutral (0.00 kg CO2)";
+    } else if (emissions > offsets) {
+        // Returns the positive difference as a String
+        return String.format("Carbon Positive (%.2f kg CO2)", net); 
+    } else {
+        return String.format("Carbon Negative (%.2f kg CO2)", net);
+    }
+}
+
 
     
     /**
@@ -105,17 +120,21 @@ public class Dashboard extends Application {
         dashboardContent.setPadding(new Insets(20));
         dashboardContent.setAlignment(Pos.CENTER);
 
+        
+
         // Create labels
         Label totalEntriesLabel = makeLabel("Total Entries: \n\n" + GreenPrintGUI.tracker.getTotalEntries());
         Label totalEmissionsLabel = makeLabel(String.format("Total Emissions:  \n\n %.2f kg CO2", GreenPrintGUI.tracker.GetTotalEmissions()));
+        Label NetEmissionsLabel = makeLabel(String.format("Net Emissions:  \n\n %s", getEmissionStatus()));
         Label highestUserLabel = makeLabel("Highest Emissions User: \n\n" + GreenPrintGUI.tracker.getHighestTotalEmissionUser());
 
         // Make labels grow with window size
         HBox.setHgrow(totalEntriesLabel, Priority.ALWAYS);
         HBox.setHgrow(totalEmissionsLabel, Priority.ALWAYS);
+        HBox.setHgrow(NetEmissionsLabel, Priority.ALWAYS);
         HBox.setHgrow(highestUserLabel, Priority.ALWAYS);
 
-        dashboardContent.getChildren().addAll(totalEntriesLabel, totalEmissionsLabel, highestUserLabel);
+        dashboardContent.getChildren().addAll(totalEntriesLabel, totalEmissionsLabel, NetEmissionsLabel, highestUserLabel);
 
         return dashboardContent;
     }

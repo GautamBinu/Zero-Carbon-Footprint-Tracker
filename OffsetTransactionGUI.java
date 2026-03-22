@@ -23,7 +23,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
      * @return the input value rounded to 2 decimal places
      */
 
-    private static double roundTo2Decimals(double value) {
+    public static double roundTo2Decimals(double value) {
         return Math.round(value * 100.0) / 100.0;
     }
 
@@ -58,7 +58,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
         Users_ComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 double totalEmissions = GreenPrintGUI.tracker.GetTotalEmissionsForUser(newValue);
-                userEmissionsLabel.setText(String.format("%s Total Emissions: \n\n %.2f kg CO2", newValue, totalEmissions));
+                userEmissionsLabel.setText(String.format("%s Total Emissions: \n\n %.2f kg CO2", newValue, roundTo2Decimals(totalEmissions)));
             } else {
                 userEmissionsLabel.setText("Select a user to view emissions");
             }
@@ -156,6 +156,8 @@ public class OffsetTransactionGUI {  // No longer extends Application
                     currentOffsetLogTab.setContent(CreateOffsetLogTab());
                 }
 
+                GreenPrintGUI.refreshDashboard();
+
                 // Show receipt page
                 String receipt = Offsets.getOffsetReceipt(finalEmissionAmount, paymentMethod, selectedUser);
                 showReceiptPage(receipt);
@@ -218,7 +220,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
         VBox content = new VBox(10);
         content.getChildren().addAll(
                 Dashboard.MakeTitleLabel("Offset Emissions Transactions"),
-                Dashboard.makeLabel(String.format("Total Emissions: \n\n %.2f kg CO2", GreenPrintGUI.tracker.GetTotalEmissions())),
+                Dashboard.makeLabel(String.format("Total Emissions: \n\n %.2f kg CO2", roundTo2Decimals(GreenPrintGUI.tracker.GetTotalEmissions()))),
                 createOffsetInputBox()
                 
         );
@@ -239,6 +241,9 @@ public class OffsetTransactionGUI {  // No longer extends Application
         OffsetsContainer.setAlignment(Pos.CENTER);
 
         OffsetsContainer.getChildren().add(Dashboard.MakeTitleLabel("Offset Purchase Log"));
+        OffsetsContainer.getChildren().add(Dashboard.UserEntryLabel(String.format("%d offsets Purchased", Logger.filterOperation("OFFSET_PURCHASED").size())));
+        OffsetsContainer.getChildren().add(Dashboard.UserEntryLabel(String.format("Total Offsets Purchased: %.2f KG CO2", Logger.CalculateTotalOffsetAmount())));
+        
 
         // Get and display offset purchase logs
         ArrayList<String> offsetEntries = Logger.filterOperation("OFFSET_PURCHASED");

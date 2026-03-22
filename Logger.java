@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.nio.file.DirectoryStream.Filter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -152,5 +154,18 @@ public class Logger {
             }
             return filtered;
         }
+
+    public static Double CalculateTotalOffsetAmount() {
+        double totalOffset = 0.0;
+        ArrayList<String> offsetEntries = filterOperation("OFFSET_PURCHASED");
+        for (String entry : offsetEntries) {
+            String[] detailParts = entry.split("\\|");
+            Double amount = Double.parseDouble(detailParts[1].trim().replaceAll("[^0-9.]", "")); // Remove non-numeric characters
+            totalOffset += amount;
+        }
+        
+        return totalOffset;
+
+    }
 
 }
