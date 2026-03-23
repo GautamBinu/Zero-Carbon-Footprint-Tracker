@@ -5,6 +5,8 @@
  */
 
 
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -215,72 +217,77 @@ public class Dashboard {
          * Adds a mouse click event handler to the emission label that displays an alert with detailed information about the emission entry when clicked. The alert includes the category, date, user name, specific details (e.g., KWH for energy, meal type for food), and the calculated emission in kg CO2. The alert is styled with a subtle off-white/greenish background and uses different text colors to differentiate between keys and values for better readability. This interactivity allows users to easily access and understand the specifics of each emission entry directly from the dashboard.
          * @param event the MouseEvent triggered when the emission label is clicked, which initiates the display of an Alert dialog containing detailed information about the emission entry, including its category, date, user name, specific details, and calculated emissions, all styled for clarity and visual appeal.
          */
-        emissionLabel.setOnMouseClicked((MouseEvent event) -> {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Emission Details");
-        alert.setHeaderText("Details for " + entry.getSourceID());
-        
-        // 1. Get the DialogPane to customize its overall style
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setPrefWidth(450); 
-        dialogPane.setStyle("-fx-background-color: #f9fbf9; -fx-font-size: 14px;"); // Subtle off-white/greenish background
+        emissionLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            
+            public void handle(MouseEvent event){
 
-        // 2. Set up styles for our labels
-        String headerStyle = "-fx-font-weight: bold; -fx-text-fill: #2c5f2d;"; // Dark green for keys
-        String valueStyle = "-fx-font-weight: bold; -fx-text-fill: #000000; -fx-font-size: 15px;"; // Dark gray for values
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Emission Details");
+                alert.setHeaderText("Details for " + entry.getSourceID());
+                
+                // 1. Get the DialogPane to customize its overall style
+                DialogPane dialogPane = alert.getDialogPane();
+                dialogPane.setPrefWidth(450); 
+                dialogPane.setStyle("-fx-background-color: #f9fbf9; -fx-font-size: 14px;"); // Subtle off-white/greenish background
 
-        // 3. Create a GridPane to perfectly align the details
-        GridPane grid = new GridPane();
-        grid.setHgap(15); // Horizontal spacing between columns
-        grid.setVgap(10); // Vertical spacing between rows
-        grid.setPadding(new javafx.geometry.Insets(10, 0, 10, 0));
+                // 2. Set up styles for our labels
+                String headerStyle = "-fx-font-weight: bold; -fx-text-fill: #2c5f2d;"; // Dark green for keys
+                String valueStyle = "-fx-font-weight: bold; -fx-text-fill: #000000; -fx-font-size: 15px;"; // Dark gray for values
 
-        // Row 0: Category
-        Label catLbl = new Label("Category:"); catLbl.setStyle(headerStyle);
-        Label catVal = new Label(entry.getCategory()); catVal.setStyle(valueStyle);
-        grid.addRow(0, catLbl, catVal);
+                // 3. Create a GridPane to perfectly align the details
+                GridPane grid = new GridPane();
+                grid.setHgap(15); // Horizontal spacing between columns
+                grid.setVgap(10); // Vertical spacing between rows
+                grid.setPadding(new javafx.geometry.Insets(10, 0, 10, 0));
 
-        // Row 1: Date
-        Label dateLbl = new Label("Date:"); dateLbl.setStyle(headerStyle);
-        Label dateVal = new Label(entry.getDate()); dateVal.setStyle(valueStyle);
-        grid.addRow(1, dateLbl, dateVal);
+                // Row 0: Category
+                Label catLbl = new Label("Category:"); catLbl.setStyle(headerStyle);
+                Label catVal = new Label(entry.getCategory()); catVal.setStyle(valueStyle);
+                grid.addRow(0, catLbl, catVal);
 
-        // Row 2: User
-        Label userLbl = new Label("User:"); userLbl.setStyle(headerStyle);
-        Label userVal = new Label(entry.getUserName()); userVal.setStyle(valueStyle);
-        grid.addRow(2, userLbl, userVal);
+                // Row 1: Date
+                Label dateLbl = new Label("Date:"); dateLbl.setStyle(headerStyle);
+                Label dateVal = new Label(entry.getDate()); dateVal.setStyle(valueStyle);
+                grid.addRow(1, dateLbl, dateVal);
 
-        // Row 3: Dynamic Emission Details (e.g., KWH, Grid type, or Food type)
-        Label specificLbl = new Label("Specifics:"); specificLbl.setStyle(headerStyle);
-        Label specificVal = new Label(GreenPrintGUI.tracker.TypeofEmission(entry)); 
-        specificVal.setStyle(valueStyle);
-        grid.addRow(3, specificLbl, specificVal);
+                // Row 2: User
+                Label userLbl = new Label("User:"); userLbl.setStyle(headerStyle);
+                Label userVal = new Label(entry.getUserName()); userVal.setStyle(valueStyle);
+                grid.addRow(2, userLbl, userVal);
 
-        // Row 4: Calculated Emission (Making this pop!)
-        Label calcLbl = new Label("Calculated Emission:"); calcLbl.setStyle(headerStyle);
-        Label calcVal = new Label(String.format("%.2f kg CO2", emission));
-        calcVal.setStyle(headerStyle + "-fx-text-fill: #d9534f;"); // Reddish color to highlight footprint
-        grid.addRow(4, calcLbl, calcVal);
+                // Row 3: Dynamic Emission Details (e.g., KWH, Grid type, or Food type)
+                Label specificLbl = new Label("Specifics:"); specificLbl.setStyle(headerStyle);
+                Label specificVal = new Label(GreenPrintGUI.tracker.TypeofEmission(entry)); 
+                specificVal.setStyle(valueStyle);
+                grid.addRow(3, specificLbl, specificVal);
 
-        // 4. Create a VBox to hold the grid, a separator line, and the raw entry string at the bottom
-        javafx.scene.layout.VBox contentBox = new javafx.scene.layout.VBox(15);
-        
-        javafx.scene.control.Separator separator = new javafx.scene.control.Separator();
-        
-        Label totalLbl = new Label("Raw Entry Data:"); 
-        totalLbl.setStyle(headerStyle);
-        
-        Label totalVal = new Label(entry.toString());
-        
-        totalVal.setStyle(valueStyle + "-fx-font-size: 12px");
+                // Row 4: Calculated Emission (Making this pop!)
+                Label calcLbl = new Label("Calculated Emission:"); calcLbl.setStyle(headerStyle);
+                Label calcVal = new Label(String.format("%.2f kg CO2", emission));
+                calcVal.setStyle(headerStyle + "-fx-text-fill: #d9534f;"); // Reddish color to highlight footprint
+                grid.addRow(4, calcLbl, calcVal);
 
-        // Add everything to the VBox
-        contentBox.getChildren().addAll(grid, separator, totalLbl, totalVal);
+                // 4. Create a VBox to hold the grid, a separator line, and the raw entry string at the bottom
+                javafx.scene.layout.VBox contentBox = new javafx.scene.layout.VBox(15);
+                
+                javafx.scene.control.Separator separator = new javafx.scene.control.Separator();
+                
+                Label totalLbl = new Label("Raw Entry Data:"); 
+                totalLbl.setStyle(headerStyle);
+                
+                Label totalVal = new Label(entry.toString());
+                
+                totalVal.setStyle(valueStyle + "-fx-font-size: 12px");
 
-        // 5. Inject our custom VBox into the Alert's content area
-        alert.getDialogPane().setContent(contentBox);
+                // Add everything to the VBox
+                contentBox.getChildren().addAll(grid, separator, totalLbl, totalVal);
 
-        alert.showAndWait();
+                // 5. Inject our custom VBox into the Alert's content area
+                alert.getDialogPane().setContent(contentBox);
+
+                alert.showAndWait();
+                
+            }
     });
         return emissionLabel;
 

@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.Button;
@@ -104,8 +106,11 @@ public class DataOperationIO {
         VBox resultsContainer = new VBox(10); 
         resultsContainer.setAlignment(Pos.CENTER);
 
-        searchButton.setOnAction(event -> {
-            String userNameToSearch = searchField.getText().trim().toLowerCase();
+        searchButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                String userNameToSearch = searchField.getText().trim().toLowerCase();
             
             // 1. Clear out any labels from a previous search
             resultsContainer.getChildren().clear();
@@ -131,7 +136,10 @@ public class DataOperationIO {
                 statusLabel.setText("✗ No entries found for user: " + userNameToSearch);
                 statusLabel.setStyle(InvalidStyle);
             }
+            }
+            
         });
+            
 
         // Add the new resultsContainer to the main view at the very bottom
         searchBox.getChildren().addAll(
@@ -229,8 +237,11 @@ public class DataOperationIO {
     public static Button CreateBackButtonToInitialBox() {
         Button backButton = CreateButton("Back");
         backButton.setMaxWidth(100);
-        backButton.setOnAction(e -> {
-            AddUserTab.setContent(InitialBox());
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                AddUserTab.setContent(InitialBox());
+            }
         });
         return backButton;
     }
@@ -321,7 +332,11 @@ public class DataOperationIO {
         Label successLabel = SuccessLabel("");
 
         // Setup ADD button action
-        addButton.setOnAction(event -> {
+        addButton.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+        
             boolean isValid = true;
             String errorMsg = "";
 
@@ -394,7 +409,8 @@ public class DataOperationIO {
             } catch (Exception e) {
                 errorLabel.setText("✗ Error adding emission: " + e.getMessage());
             }
-        });
+        }
+    });
 
         transportationBox.getChildren().addAll(
             Dashboard.MakeTitleLabel("ADD TRANSPORTATION EMISSIONS"),
@@ -427,7 +443,11 @@ public class DataOperationIO {
         Label successLabel = SuccessLabel("");
 
         // Setup ADD button action
-        addButton.setOnAction(event -> {
+        addButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
             boolean isValid = true;
             String errorMsg = "";
             
@@ -502,7 +522,8 @@ public class DataOperationIO {
             } catch (Exception e) {
                 errorLabel.setText("✗ Error adding emission: " + e.getMessage());
             }
-        });
+        }
+    });
 
         energyBox.getChildren().addAll(
             Dashboard.MakeTitleLabel("ADD ENERGY EMISSIONS"),
@@ -535,7 +556,11 @@ public class DataOperationIO {
         Label successLabel = SuccessLabel("");
 
         // Setup ADD button action
-        addButton.setOnAction(event -> {
+        addButton.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+        
             boolean isValid = true;
             String errorMsg = "";
             
@@ -609,7 +634,8 @@ public class DataOperationIO {
             } catch (Exception e) {
                 errorLabel.setText("✗ Error adding emission: " + e.getMessage());
             }
-        });
+        }
+    });
 
         foodBox.getChildren().addAll(
             Dashboard.MakeTitleLabel("ADD FOOD EMISSIONS"),
@@ -651,7 +677,10 @@ public class DataOperationIO {
 
 
         // Setup Continue button action
-        continueButton.setOnAction(event -> {
+        continueButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+        
             String userName = userNameField.getText().trim();
             String emissionType = emissionTypeComboBox.getValue();
 
@@ -679,7 +708,12 @@ public class DataOperationIO {
                 errorMsg += "✗ Date must be selected\n";
                 datePicker.setStyle(InvalidBorderStyle);
                 isValid = false;
-            } else {
+            } else if (datePicker.getValue().isAfter(java.time.LocalDate.now())) {
+                errorMsg += "✗ Date cannot be in the future\n";
+                datePicker.setStyle(InvalidBorderStyle);
+                isValid = false;
+             }
+            else {
                 datePicker.setStyle(PassiveStyle);
             }
 
@@ -700,7 +734,8 @@ public class DataOperationIO {
             } else if (emissionType.equals("Food Emissions")) {
                 AddUserTab.setContent(FoodEmissionsFields());
             }
-        });
+        }
+    });
 
         // Add initial content or instructions for the Data Operations tab
         // Include success label only if there's a success message

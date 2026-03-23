@@ -1,11 +1,15 @@
 import javafx.scene.control.*;
 import javafx.geometry.Insets;
 import javafx.animation.PauseTransition;
+import javafx.event.EventHandler;
 import javafx.util.Duration;
 import java.util.ArrayList;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Side;
 import javafx.geometry.Pos;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 
 public class OffsetTransactionGUI {  // No longer extends Application
 
@@ -42,9 +46,12 @@ public class OffsetTransactionGUI {  // No longer extends Application
         ComboBox<String> Users_ComboBox = DataOperationIO.CreateComboBox("Select User", users.toArray(new String[0]));
         
         // Refresh user list when dropdown is opened to show newly added users
-        Users_ComboBox.setOnShowing(event -> {
-            ArrayList<String> updatedUsers = GreenPrintGUI.tracker.getUniqueUsers();
-            Users_ComboBox.getItems().setAll(updatedUsers);
+        Users_ComboBox.setOnShowing(new EventHandler<Event>() { 
+        @Override
+        public void handle(Event event) {
+        ArrayList<String> updatedUsers = GreenPrintGUI.tracker.getUniqueUsers();
+        Users_ComboBox.getItems().setAll(updatedUsers);
+        }
         });
         
         Label userEmissionsLabel = Dashboard.makeLabel("Select a user to view emissions");
@@ -80,7 +87,9 @@ public class OffsetTransactionGUI {  // No longer extends Application
         });
 
         // Purchase Offset button action with validation
-        submitButton.setOnAction(event -> {
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event)  {
             boolean isValid = true;
             String errorMsg = "";
 
@@ -144,7 +153,11 @@ public class OffsetTransactionGUI {  // No longer extends Application
             // Create 2-second pause transition
             double finalEmissionAmount = emissionAmount;
             PauseTransition pause = new PauseTransition(Duration.seconds(2));
-            pause.setOnFinished(e -> {
+            pause.setOnFinished(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+
                 // Log the purchase
                 
                 String logDetails = String.format("User: %s | Amount: %.2f kg CO2 | Cost: $%.2f | Payment: %s",
@@ -161,9 +174,11 @@ public class OffsetTransactionGUI {  // No longer extends Application
                 // Show receipt page
                 String receipt = Offsets.getOffsetReceipt(finalEmissionAmount, paymentMethod, selectedUser);
                 showReceiptPage(receipt);
+            }
             });
             pause.play();
-        });
+        }
+    });
 
         inputBox.getChildren().addAll(Users_ComboBox, userEmissionsLabel, EmissionInput, Payment_ComboBox, priceLabel, errorLabel, submitButton);
         return inputBox;
@@ -196,8 +211,11 @@ public class OffsetTransactionGUI {  // No longer extends Application
 
         // Create back button
         Button backButton = DataOperationIO.CreateButton("Back to Purchase More Offsets"); backButton.setMaxWidth(350);
-        backButton.setOnAction(e -> {
-            currentOffsetTab.setContent(createOffsetGUI());
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                currentOffsetTab.setContent(createOffsetGUI());
+            }
         });
 
         receiptBox.getChildren().addAll(
