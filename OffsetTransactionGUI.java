@@ -82,12 +82,12 @@ public class OffsetTransactionGUI {  // No longer extends Application
         // Purchase Offset button action with validation
         submitButton.setOnAction(event -> {
             boolean isValid = true;
-            StringBuilder errorMsg = new StringBuilder();
+            String errorMsg = "";
 
             // Validate user selection
             String selectedUser = Users_ComboBox.getValue();
             if (selectedUser == null) {
-                errorMsg.append("✗ User must be selected\n");
+                errorMsg += "✗ User must be selected\n";
                 Users_ComboBox.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -100,7 +100,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
             try {
                 emissionAmount = Double.parseDouble(emissionText);
                 if (emissionAmount < 0) {
-                    errorMsg.append("✗ Emission Amount cannot be negative\n");
+                    errorMsg += "✗ Emission Amount cannot be negative\n";
                     EmissionInput.setStyle(InvalidBorderStyle);
                     isValid = false;
                 } else if (selectedUser != null) {
@@ -108,7 +108,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
                     // Compare against the same precision shown in the UI to avoid floating-point mismatch.
                     double allowedMax = roundTo2Decimals(userTotalEmissions);
                     if (emissionAmount > allowedMax) {
-                        errorMsg.append("✗ Emission Amount cannot exceed Total Emissions\n");
+                        errorMsg += "✗ Emission Amount cannot exceed Total Emissions\n";
                         EmissionInput.setStyle(InvalidBorderStyle);
                         isValid = false;
                     } else {
@@ -116,7 +116,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
                     }
                 }
             } catch (NumberFormatException e) {
-                errorMsg.append("✗ Emission Amount must be a valid number\n");
+                errorMsg += "✗ Emission Amount must be a valid number\n";
                 EmissionInput.setStyle(InvalidBorderStyle);
                 isValid = false;
             }
@@ -124,7 +124,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
             // Validate payment method
             String paymentMethod = Payment_ComboBox.getValue();
             if (paymentMethod == null) {
-                errorMsg.append("✗ Payment Method must be selected\n");
+                errorMsg += "✗ Payment Method must be selected\n";
                 Payment_ComboBox.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -132,7 +132,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
             }
 
             if (!isValid) {
-                errorLabel.setText(errorMsg.toString());
+                errorLabel.setText(errorMsg);
                 return;
             }
 

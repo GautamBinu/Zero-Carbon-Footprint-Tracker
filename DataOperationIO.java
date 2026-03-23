@@ -118,10 +118,9 @@ public class DataOperationIO {
 
             // 2. Search for entries matching the user name
             for (EmissionSource entry : GreenPrintGUI.tracker.getEntriesByUser(userNameToSearch)) {
-                if (entry.getUserName().equalsIgnoreCase(userNameToSearch)) {
-                    // Create a label for this specific entry and add it to the container
+                
                     resultsContainer.getChildren().add(Dashboard.makeLabel(entry.toString()));
-                }
+                
             }
 
             // 3. Update the status label based on whether our container has anything in it
@@ -324,8 +323,7 @@ public class DataOperationIO {
         // Setup ADD button action
         addButton.setOnAction(event -> {
             boolean isValid = true;
-            StringBuilder errorMsg = new StringBuilder();
-            
+            String errorMsg = "";
 
             // Get validation label from CreateIDField HBox (it's the 3rd child)
             Label validationLabel = (Label) CreateIDField.getChildren().get(2);
@@ -334,7 +332,7 @@ public class DataOperationIO {
 
             // Validate ID field
             if (!validationLabel.getText().equals("✓ Valid")) {
-                errorMsg.append("✗ Valid Emission ID is required\n");
+                errorMsg += "✗ Valid Emission ID is required\n";
                 idTextField.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -347,14 +345,14 @@ public class DataOperationIO {
             try {
                 distance = Double.parseDouble(distanceText);
                 if (distance < 0) {
-                    errorMsg.append("✗ Distance cannot be negative\n");
+                    errorMsg += "✗ Distance cannot be negative\n";
                     distanceField.setStyle(InvalidBorderStyle);
                     isValid = false;
                 } else {
                     distanceField.setStyle(PassiveStyle);
                 }
             } catch (NumberFormatException e) {
-                errorMsg.append("✗ Distance must be a valid number\n");
+                errorMsg += "✗ Distance must be a valid number\n";
                 distanceField.setStyle(InvalidBorderStyle);
                 isValid = false;
             }
@@ -362,7 +360,7 @@ public class DataOperationIO {
             // Validate vehicle type
             String vehicleType = vehicleTypeComboBox.getValue();
             if (vehicleType == null) {
-                errorMsg.append("✗ Vehicle Type must be selected\n");
+                errorMsg += "✗ Vehicle Type must be selected\n";
                 vehicleTypeComboBox.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -370,7 +368,7 @@ public class DataOperationIO {
             }
 
             if (!isValid) {
-                errorLabel.setText(errorMsg.toString());
+                errorLabel.setText(errorMsg);
                 return;
             }
 
@@ -431,7 +429,7 @@ public class DataOperationIO {
         // Setup ADD button action
         addButton.setOnAction(event -> {
             boolean isValid = true;
-            StringBuilder errorMsg = new StringBuilder();
+            String errorMsg = "";
             
 
             // Get validation label from CreateIDField HBox (it's the 3rd child)
@@ -441,7 +439,7 @@ public class DataOperationIO {
 
             // Validate ID field
             if (!validationLabel.getText().equals("✓ Valid")) {
-                errorMsg.append("✗ Valid Emission ID is required\n");
+                errorMsg += "✗ Valid Emission ID is required\n";
                 idTextField.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -454,14 +452,14 @@ public class DataOperationIO {
             try {
                 kwh = Double.parseDouble(kwhText);
                 if (kwh < 0) {
-                    errorMsg.append("✗ KWH cannot be negative\n");
+                    errorMsg += "✗ KWH cannot be negative\n";
                     kwhField.setStyle(InvalidBorderStyle);
                     isValid = false;
                 } else {
                     kwhField.setStyle(PassiveStyle);
                 }
             } catch (NumberFormatException e) {
-                errorMsg.append("✗ KWH must be a valid number\n");
+                errorMsg += "✗ KWH must be a valid number\n";
                 kwhField.setStyle(InvalidBorderStyle);
                 isValid = false;
             }
@@ -469,7 +467,7 @@ public class DataOperationIO {
             // Validate energy source
             String energySource = energySourceComboBox.getValue();
             if (energySource == null) {
-                errorMsg.append("✗ Energy Source must be selected\n");
+                errorMsg += "✗ Energy Source must be selected\n";
                 energySourceComboBox.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -477,7 +475,7 @@ public class DataOperationIO {
             }
 
             if (!isValid) {
-                errorLabel.setText(errorMsg.toString());
+                errorLabel.setText(errorMsg);
                 return;
             }
 
@@ -539,7 +537,7 @@ public class DataOperationIO {
         // Setup ADD button action
         addButton.setOnAction(event -> {
             boolean isValid = true;
-            StringBuilder errorMsg = new StringBuilder();
+            String errorMsg = "";
             
 
             // Get validation label from CreateIDField HBox (it's the 3rd child)
@@ -549,7 +547,7 @@ public class DataOperationIO {
 
             // Validate ID field
             if (!validationLabel.getText().equals("✓ Valid")) {
-                errorMsg.append("✗ Valid Emission ID is required\n");
+                errorMsg += "✗ Valid Emission ID is required\n";
                 idTextField.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -562,14 +560,14 @@ public class DataOperationIO {
             try {
                 meals = Integer.parseInt(mealsText);
                 if (meals < 0) {
-                    errorMsg.append("✗ Number of Meals cannot be negative\n");
+                    errorMsg += "✗ Number of Meals cannot be negative\n";
                     mealsField.setStyle(InvalidBorderStyle);
                     isValid = false;
                 } else {
                     mealsField.setStyle(PassiveStyle);
                 }
             } catch (NumberFormatException e) {
-                errorMsg.append("✗ Number of Meals must be a valid integer\n");
+                errorMsg += "✗ Number of Meals must be a valid integer\n";
                 mealsField.setStyle(InvalidBorderStyle);
                 isValid = false;
             }
@@ -577,7 +575,7 @@ public class DataOperationIO {
             // Validate meal type
             String mealType = mealTypeComboBox.getValue();
             if (mealType == null) {
-                errorMsg.append("✗ Meal Type must be selected\n");
+                errorMsg += "✗ Meal Type must be selected\n";
                 mealTypeComboBox.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -585,7 +583,7 @@ public class DataOperationIO {
             }
 
             if (!isValid) {
-                errorLabel.setText(errorMsg.toString());
+                errorLabel.setText(errorMsg);
                 return;
             }
 
@@ -659,10 +657,10 @@ public class DataOperationIO {
 
             // Validate inputs
             boolean isValid = true;
-            StringBuilder errorMsg = new StringBuilder();
+            String errorMsg = new String();
 
             if (userName.isEmpty()) {
-                errorMsg.append("✗ User Name is required\n");
+                errorMsg += "✗ User Name is required\n";
                 userNameField.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -670,7 +668,7 @@ public class DataOperationIO {
             }
 
             if (emissionType == null) {
-                errorMsg.append("✗ Emission Type must be selected\n");
+                errorMsg += "✗ Emission Type must be selected\n";
                 emissionTypeComboBox.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -678,7 +676,7 @@ public class DataOperationIO {
             }
 
             if (datePicker.getValue() == null) {
-                errorMsg.append("✗ Date must be selected\n");
+                errorMsg += "✗ Date must be selected\n";
                 datePicker.setStyle(InvalidBorderStyle);
                 isValid = false;
             } else {
@@ -686,7 +684,7 @@ public class DataOperationIO {
             }
 
             if (!isValid) {
-                errorLabel.setText(errorMsg.toString());
+                errorLabel.setText(errorMsg);
                 return;
             }
 
