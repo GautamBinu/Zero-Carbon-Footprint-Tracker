@@ -74,12 +74,12 @@ public class Dashboard {
             "-fx-background-color: white; " +
             "-fx-border-color: green; " +
             "-fx-border-width: 3px; " +
-            "-fx-border-radius: 20px; " +  // More rounded corners
-            "-fx-background-radius: 20px; " +  // More rounded corners
+            "-fx-border-radius: 20px; " +  
+            "-fx-background-radius: 20px; " +  
             "-fx-text-fill: black; " +
-            "-fx-font-size: 20px; " +  // Bigger font size
-            "-fx-font-weight: bold; " +  // Bold text
-            "-fx-padding: 50px 40px;" // Much bigger padding for larger boxes
+            "-fx-font-size: 20px; " +  
+            "-fx-font-weight: bold; " +  
+            "-fx-padding: 50px 40px;" 
         );
 
         // Make labels grow with window size

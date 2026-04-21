@@ -274,7 +274,7 @@ public class DataOperationIO {
     
     textField.textProperty().addListener((observable, oldValue, newValue) -> {
         
-        String stringToValidate = BeginningCharacter + "-" + newValue.trim();
+        String stringToValidate = BeginningCharacter + "-" + newValue.trim(); 
         
         try {
             int validationResult = EmissionIDValidator.ValidateFinal(stringToValidate);
@@ -403,6 +403,7 @@ public class DataOperationIO {
 
                 // Refresh the dashboard to show the new data
                 GreenPrintGUI.refreshDashboard();
+                OffsetTransactionGUI.currentOffsetTab.setContent(OffsetTransactionGUI.createOffsetGUI());
 
                 // Clear fields for next entry
                 AddUserTab.setContent(InitialBox("✓ Transportation Emission added successfully!"));
@@ -515,6 +516,7 @@ public class DataOperationIO {
 
                 // Refresh the dashboard to show the new data
                 GreenPrintGUI.refreshDashboard();
+                OffsetTransactionGUI.currentOffsetTab.setContent(OffsetTransactionGUI.createOffsetGUI());
 
                 // Clear fields for next entry
                 AddUserTab.setContent(InitialBox("✓ Energy Emission added successfully!"));
@@ -626,6 +628,7 @@ public class DataOperationIO {
                 GreenPrintGUI.tracker.addEntry(emission);
 
                 GreenPrintGUI.refreshDashboard();
+                OffsetTransactionGUI.currentOffsetTab.setContent(OffsetTransactionGUI.createOffsetGUI());
 
                 // Clear fields for next entry
                 AddUserTab.setContent(InitialBox("✓ Food Emission added successfully!"));

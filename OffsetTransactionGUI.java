@@ -43,7 +43,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
         ArrayList<String> users = GreenPrintGUI.tracker.getUniqueUsers();
 
         // Create UI elements
-        ComboBox<String> Users_ComboBox = DataOperationIO.CreateComboBox("Select User", users.toArray(new String[0]));
+        ComboBox<String> Users_ComboBox = DataOperationIO.CreateComboBox("Select User", users.toArray(new String[users.size()]));
         
         // Refresh user list when dropdown is opened to show newly added users
         Users_ComboBox.setOnShowing(new EventHandler<Event>() { 
@@ -79,7 +79,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
                 } else {
                     double amount = Double.parseDouble(newValue.trim());
                     double cost = Offsets.calculateOffsetCost(amount);
-                    priceLabel.setText(String.format("Calculated Price: $%.2f", cost));
+                    priceLabel.setText(String.format("Calculated Price: $%.2f", roundTo2Decimals(cost)));
                 }
             } catch (NumberFormatException e) {
                 priceLabel.setText("Calculated Price: $0.00");
@@ -257,14 +257,15 @@ public class OffsetTransactionGUI {  // No longer extends Application
         VBox OffsetsContainer = new VBox(10);
         OffsetsContainer.setPadding(new Insets(20));
         OffsetsContainer.setAlignment(Pos.CENTER);
+        ArrayList<String> offsetEntries = Logger.filterOperation("OFFSET_PURCHASED");
 
         OffsetsContainer.getChildren().add(Dashboard.MakeTitleLabel("Offset Purchase Log"));
-        OffsetsContainer.getChildren().add(Dashboard.UserEntryLabel(String.format("%d offsets Purchased", Logger.filterOperation("OFFSET_PURCHASED").size())));
-        OffsetsContainer.getChildren().add(Dashboard.UserEntryLabel(String.format("Total Offsets Purchased: %.2f KG CO2", Logger.CalculateTotalOffsetAmount())));
+        OffsetsContainer.getChildren().add(Dashboard.UserEntryLabel(String.format("%d offsets Purchased", offsetEntries.size())));
+        OffsetsContainer.getChildren().add(Dashboard.UserEntryLabel(String.format("Total Offsets Purchased: %.2f KG CO2", roundTo2Decimals(Logger.CalculateTotalOffsetAmount()))));
         
 
         // Get and display offset purchase logs
-        ArrayList<String> offsetEntries = Logger.filterOperation("OFFSET_PURCHASED");
+        
         if (offsetEntries.isEmpty()) {
             OffsetsContainer.getChildren().add(Dashboard.makeLabel("no Offsets Purchased Yet"));
         } else {

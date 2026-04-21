@@ -21,8 +21,8 @@ import java.util.ArrayList;
 public class Logger {
 
 
-    private static String LOG_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_log.txt";
-    private static String STATE_FILE = "Zero-Carbon-Footprint-Tracker/greenprint_save_state.txt";
+    private static String LOG_FILE = "greenprint_log.txt";
+    private static String STATE_FILE = "greenprint_save_state.txt";
 
   
 
