@@ -68,7 +68,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
             if (oldValue != null && !oldValue.equals(newValue)
                 && discountMessageLabel.getText() != null
                 && (discountMessageLabel.getText().startsWith("Server reward applied:")
-                    || discountMessageLabel.getText().equals("You can request a discount for the new value!")
+                    || discountMessageLabel.getText().equals("You can request a discount for the new Emission!")
                     || discountMessageLabel.getText().equals("You can request a discount for the new user!"))) {
                 discountMessageLabel.setText("You can request a discount for the new user!");
                 discountMessageLabel.setStyle(DataOperationIO.ValidStyle);
@@ -89,7 +89,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
             if (oldValue != null && !oldValue.equals(newValue)
                 && discountMessageLabel.getText() != null
                 && discountMessageLabel.getText().startsWith("Server reward applied:")) {
-                discountMessageLabel.setText("You can request a discount for the new value!");
+                discountMessageLabel.setText("You can request a discount for the new Emission!");
                 discountMessageLabel.setStyle(DataOperationIO.ValidStyle);
             }
 
@@ -113,28 +113,49 @@ public class OffsetTransactionGUI {  // No longer extends Application
         requestDiscountButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String emissionText = EmissionInput.getText().trim();
+                
+                // Safely handle the ComboBox (Check for null BEFORE trimming)
+                String rawUser = Users_ComboBox.getValue();
+                if (rawUser == null || rawUser.trim().isEmpty()) {
+                    discountMessageLabel.setText("Select a user first");
+                    discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
+                    return;
+                }
+                String selectedUser = rawUser.trim();
 
-                // Validate emission input
-                if (emissionText.isEmpty()) {
+                // Safely check the text field BEFORE parsing
+                String emissionText = EmissionInput.getText();
+                if (emissionText == null || emissionText.trim().isEmpty()) {
                     discountMessageLabel.setText("Enter an emission amount first");
                     discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
                     return;
                 }
 
-                double emissionAmount = 0.0;
+                //parsing the number (Catches non-numeric inputs like "abc")
+                Double emissionAmount;
                 try {
-                    emissionAmount = Double.parseDouble(emissionText);
-                    if (emissionAmount <= 0) {
-                        discountMessageLabel.setText("Emission amount must be greater than 0");
-                        discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
-                        return;
-                    }
+                    emissionAmount = Double.parseDouble(emissionText.trim());
                 } catch (NumberFormatException e) {
-                    discountMessageLabel.setText("Enter a valid emission amount");
+                    discountMessageLabel.setText("Emission amount must be a valid number");
                     discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
                     return;
                 }
+
+                // Validate emission input (Now we know it's a valid number)
+                if (emissionAmount <= 0) {
+                    discountMessageLabel.setText("Enter a valid emission amount greater than 0");
+                    discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
+                    return;
+                }
+
+                // logic
+                if (GreenPrintGUI.tracker.GetTotalEmissionsForUser(selectedUser) < emissionAmount) {
+                    discountMessageLabel.setText("Cannot Request Discount while Emission Amount is Greater than Total Emissions for the user");
+                    discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
+                    return;
+                }
+
+            
 
                 // Disable button and show processing message
                 requestDiscountButton.setDisable(true);
@@ -160,8 +181,8 @@ public class OffsetTransactionGUI {  // No longer extends Application
                             String selectedUser = Users_ComboBox.getValue();
                             if (selectedUser != null) {
                                 double savings = result.calculateSavings();
-                                String logDetails = String.format("User: %s | Original: %.2f kg CO2 | Discount: %d%% | Discounted: %.2f kg CO2 | Savings: $%.2f",
-                                    selectedUser, finalEmissionAmount, result.getDiscountPercentage(), result.getDiscountedEmissionValue(), savings);
+                                String logDetails = String.format("User: %s | Original: %.2f kg CO2 | Discount: %d%% | Discounted: %.2f kg CO2 | Savings: $%.2f | Cost Before Discount: $%.2f | Cost After Discount: $%.2f",
+                                    selectedUser, finalEmissionAmount, result.getDiscountPercentage(), result.getDiscountedEmissionValue(), savings, Offsets.calculateOffsetCost(finalEmissionAmount), discountedCost);
                                 Logger.log("DISCOUNT_APPLIED", logDetails);
                             }
 
@@ -180,6 +201,8 @@ public class OffsetTransactionGUI {  // No longer extends Application
                     }
                 );
             }
+
+          
         });
 
         // Purchase Offset button action with validation
