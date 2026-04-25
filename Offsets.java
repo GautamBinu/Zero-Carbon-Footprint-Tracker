@@ -3,7 +3,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Offsets {
-    static double offset_rate_per_kg = 0.015;
+    static double offset_rate_per_kg = 1.015;
     String date;
 
   
@@ -35,7 +35,14 @@ public class Offsets {
     * @return a formatted receipt string containing the details of the offset transaction
     */
 
-    public static String getOffsetReceipt(double EmissionsKg, String paymentMethod, String userName) {
+    public static String getOffsetReceipt(double EmissionsKg, String paymentMethod, String userName, boolean isDiscounted, double finalCost, double savings) {
+
+        String totalCostLine;
+        if (isDiscounted) {
+            totalCostLine = String.format("Total Cost: %.2f AED (Discounted, saved %.2f AED)", finalCost, savings);
+        } else {
+            totalCostLine = String.format("Total Cost: %.2f AED", finalCost);
+        }
 
         return String.format(
 
@@ -46,13 +53,13 @@ public class Offsets {
                 "Emission Type: %s\n" +
                 "Weigh offset: %.2f kg CO2\n" +
                 "Amount Offset per Kg CO2: %.3f AED\n" +
-                "Total Cost: $%.2f AED\n" +
+                "%s\n" +
                 "Payment Method: %s\n" +
                 "Status: Confirmation - Transaction Successful!" +
                 "\nThank you for your contribution to a greener planet!\n" +
                 "<- RECEIPT END ->",
 
-                java.time.LocalDate.now(), LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")), userName, "All Emission Types", EmissionsKg, offset_rate_per_kg, calculateOffsetCost(EmissionsKg), paymentMethod
+                java.time.LocalDate.now(), LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")), userName, "All Emission Types", EmissionsKg, offset_rate_per_kg, totalCostLine, paymentMethod
         );
     }
 

@@ -1,0 +1,45 @@
+import java.io.*;
+import java.net.*;
+import java.util.Random;
+
+public class FootprintDiscountServer {
+    private static final int PORT = 6700; // Documented Port
+
+    public static void main(String[] args) {
+        System.out.println("[SERVER] Discount Server started on port " + PORT);
+        Random random = new Random();
+
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            while (true) {
+                // Accept one client connection at a time in a loop
+                try (Socket clientSocket = serverSocket.accept();
+                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                     PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
+
+                    // Read emission value from client
+                    String input = in.readLine();
+                    if (input != null) {
+                        double totalEmission = Double.parseDouble(input);
+                        
+                        // Generate random discount 1-30
+                        int discountPct = random.nextInt(30) + 1;
+                        double discountedValue = totalEmission * (1.0 - discountPct / 100.0);
+
+                        // Format response: DISCOUNT:pct:value
+                        String response = String.format("DISCOUNT:%d:%.2f", discountPct, discountedValue);
+                        out.println(response);
+
+                        // Console Log
+                        System.out.printf("[SERVER] Client connected | Sent: %.2f | Discount: %d%% | Result: %.2f%n", 
+                                          totalEmission, discountPct, discountedValue);
+                    }
+                } catch (IOException | NumberFormatException e) {
+                    System.err.println("[SERVER] Error processing transaction: " + e.getMessage());
+                    // Loop continues so server doesn't crash
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("[SERVER] Could not listen on port " + PORT);
+        }
+    }
+}

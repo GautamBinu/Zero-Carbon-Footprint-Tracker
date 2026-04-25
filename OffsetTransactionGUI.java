@@ -58,31 +58,127 @@ public class OffsetTransactionGUI {  // No longer extends Application
         TextField EmissionInput = DataOperationIO.CreateTextField("Enter Emission Amount to Offset (kg CO2)");
         ComboBox<String> Payment_ComboBox = DataOperationIO.CreateComboBox("Payment Method", "Credit Card", "Digital Wallet", "Campus Card");
         Label priceLabel = Dashboard.UserEntryLabel("Calculated Price: $0.00");
+        Label discountMessageLabel = DataOperationIO.ErrorLabel(""); // Reuse ErrorLabel styling, will be set to ValidStyle or InvalidStyle
         Label errorLabel = DataOperationIO.ErrorLabel("");
         Button submitButton = DataOperationIO.CreateButton("Purchase Offset");
+        Button requestDiscountButton = DataOperationIO.CreateButton("Request Discount");
 
         // Update label when user is selected
         Users_ComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null && !oldValue.equals(newValue)
+                && discountMessageLabel.getText() != null
+                && (discountMessageLabel.getText().startsWith("Server reward applied:")
+                    || discountMessageLabel.getText().equals("You can request a discount for the new value!")
+                    || discountMessageLabel.getText().equals("You can request a discount for the new user!"))) {
+                discountMessageLabel.setText("You can request a discount for the new user!");
+                discountMessageLabel.setStyle(DataOperationIO.ValidStyle);
+            }
+
             if (newValue != null) {
                 double totalEmissions = GreenPrintGUI.tracker.GetTotalEmissionsForUser(newValue);
                 userEmissionsLabel.setText(String.format("%s Total Emissions: \n\n %.2f kg CO2", newValue, roundTo2Decimals(totalEmissions)));
+                requestDiscountButton.setDisable(false);
             } else {
                 userEmissionsLabel.setText("Select a user to view emissions");
+                requestDiscountButton.setDisable(true);
             }
         });
 
         // Update price label when emission amount changes
         EmissionInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null && !oldValue.equals(newValue)
+                && discountMessageLabel.getText() != null
+                && discountMessageLabel.getText().startsWith("Server reward applied:")) {
+                discountMessageLabel.setText("You can request a discount for the new value!");
+                discountMessageLabel.setStyle(DataOperationIO.ValidStyle);
+            }
+
             try {
                 if (newValue.trim().isEmpty()) {
                     priceLabel.setText("Calculated Price: $0.00");
+                    requestDiscountButton.setDisable(true);
                 } else {
                     double amount = Double.parseDouble(newValue.trim());
                     double cost = Offsets.calculateOffsetCost(amount);
                     priceLabel.setText(String.format("Calculated Price: $%.2f", roundTo2Decimals(cost)));
+                    requestDiscountButton.setDisable(amount <= 0);
                 }
             } catch (NumberFormatException e) {
                 priceLabel.setText("Calculated Price: $0.00");
+                requestDiscountButton.setDisable(true);
+            }
+        });
+
+        // Request Discount button action
+        requestDiscountButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String emissionText = EmissionInput.getText().trim();
+
+                // Validate emission input
+                if (emissionText.isEmpty()) {
+                    discountMessageLabel.setText("Enter an emission amount first");
+                    discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
+                    return;
+                }
+
+                double emissionAmount = 0.0;
+                try {
+                    emissionAmount = Double.parseDouble(emissionText);
+                    if (emissionAmount <= 0) {
+                        discountMessageLabel.setText("Emission amount must be greater than 0");
+                        discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    discountMessageLabel.setText("Enter a valid emission amount");
+                    discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
+                    return;
+                }
+
+                // Disable button and show processing message
+                requestDiscountButton.setDisable(true);
+                discountMessageLabel.setText("Requesting discount from server...");
+                discountMessageLabel.setStyle(DataOperationIO.ValidStyle);
+
+                final double finalEmissionAmount = emissionAmount;
+
+                // Call client to request discount (runs on background thread)
+                FootprintDiscountClient.requestDiscount(emissionAmount,
+                    new FootprintDiscountClient.DiscountSuccessHandler() {
+                        @Override
+                        public void handle(DiscountResult result) {
+                            // Success callback
+                            discountMessageLabel.setText(result.getFormattedMessage());
+                            discountMessageLabel.setStyle(DataOperationIO.ValidStyle);
+
+                            // Update price label with discounted cost
+                            double discountedCost = Offsets.calculateOffsetCost(result.getDiscountedEmissionValue());
+                            priceLabel.setText(String.format("Discounted Price: $%.2f", roundTo2Decimals(discountedCost)));
+
+                            // Get the selected user for logging
+                            String selectedUser = Users_ComboBox.getValue();
+                            if (selectedUser != null) {
+                                double savings = result.calculateSavings();
+                                String logDetails = String.format("User: %s | Original: %.2f kg CO2 | Discount: %d%% | Discounted: %.2f kg CO2 | Savings: $%.2f",
+                                    selectedUser, finalEmissionAmount, result.getDiscountPercentage(), result.getDiscountedEmissionValue(), savings);
+                                Logger.log("DISCOUNT_APPLIED", logDetails);
+                            }
+
+                            // Keep disabled until the user changes inputs.
+                            requestDiscountButton.setDisable(true);
+                        }
+                    },
+                    new FootprintDiscountClient.DiscountErrorHandler() {
+                        @Override
+                        public void handle(String error) {
+                            // Error callback
+                            discountMessageLabel.setText(error);
+                            discountMessageLabel.setStyle(DataOperationIO.InvalidStyle);
+                            requestDiscountButton.setDisable(false);
+                        }
+                    }
+                );
             }
         });
 
@@ -158,11 +254,34 @@ public class OffsetTransactionGUI {  // No longer extends Application
                 @Override
                 public void handle(ActionEvent event) {
 
+                String displayedPriceText = priceLabel.getText();
+                boolean isDiscounted = displayedPriceText.startsWith("Discounted Price:");
+                double finalCost;
+                try {
+                    finalCost = Double.parseDouble(displayedPriceText.replaceAll("[^0-9.]", ""));
+                } catch (NumberFormatException e) {
+                    finalCost = Offsets.calculateOffsetCost(finalEmissionAmount);
+                }
+
+                double regularCost = Offsets.calculateOffsetCost(finalEmissionAmount);
+
+                double savings = roundTo2Decimals(regularCost - finalCost);
+
+                if (savings < 0) {
+                    savings = 0.0;
+                }
+
                 // Log the purchase
-                
-                String logDetails = String.format("User: %s | Amount: %.2f kg CO2 | Cost: $%.2f | Payment: %s",
-                selectedUser, finalEmissionAmount, Offsets.calculateOffsetCost(finalEmissionAmount), paymentMethod);
+                if (isDiscounted) {
+                     String logDetails = String.format("User: %s | Amount: %.2f kg CO2 | Cost: $%.2f (Discounted) | Payment: %s",
+                selectedUser, finalEmissionAmount, finalCost, paymentMethod);
                 Logger.log("OFFSET_PURCHASED", logDetails);
+                    
+                } else {
+                String logDetails = String.format("User: %s | Amount: %.2f kg CO2 | Cost: $%.2f | Payment: %s",
+                selectedUser, finalEmissionAmount, finalCost, paymentMethod);
+                Logger.log("OFFSET_PURCHASED", logDetails);
+                }
 
                 // Refresh the Offset Log tab to show the new purchase
                 if (currentOffsetLogTab != null) {
@@ -172,7 +291,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
                 GreenPrintGUI.refreshDashboard();
 
                 // Show receipt page
-                String receipt = Offsets.getOffsetReceipt(finalEmissionAmount, paymentMethod, selectedUser);
+                String receipt = Offsets.getOffsetReceipt(finalEmissionAmount, paymentMethod, selectedUser, isDiscounted, finalCost, savings);
                 showReceiptPage(receipt);
             }
             });
@@ -180,7 +299,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
         }
     });
 
-        inputBox.getChildren().addAll(Users_ComboBox, userEmissionsLabel, EmissionInput, Payment_ComboBox, priceLabel, errorLabel, submitButton);
+        inputBox.getChildren().addAll(Users_ComboBox, userEmissionsLabel, EmissionInput, Payment_ComboBox, priceLabel, requestDiscountButton, discountMessageLabel, errorLabel, submitButton);
         return inputBox;
     }
 
