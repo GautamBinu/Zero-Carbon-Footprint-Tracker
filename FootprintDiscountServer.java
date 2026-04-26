@@ -5,6 +5,14 @@ import java.util.Random;
 public class FootprintDiscountServer {
     private static final int PORT = 6700; // Documented Port
 
+    /**
+     * Starts the discount server which listens for incoming connections and processes discount requests.
+     * This server runs indefinitely until manually stopped. It handles one client connection at a time.
+     * Each client request should contain a single line with the CO2 emission value in kg. The server responds with a discount percentage and the discounted emission value.
+     * 
+     * @param args
+     */
+
     public static void main(String[] args) {
         System.out.println("[SERVER] Discount Server started on port " + PORT);
         Random random = new Random();
@@ -38,12 +46,12 @@ public class FootprintDiscountServer {
                                           totalEmission, discountPct, discountedValue);
                     }
                 } catch (IOException | NumberFormatException e) {
-                    System.err.println("[SERVER] Error processing transaction: " + e.getMessage());
+                    System.out.println("[SERVER] Error processing transaction: " + e.getMessage());
                     // Loop continues so server doesn't crash
                 }
             }
         } catch (IOException e) {
-            System.err.println("[SERVER] Could not listen on port " + PORT);
+            System.out.println("[SERVER] Could not listen on port " + PORT);
         }
     }
 }
