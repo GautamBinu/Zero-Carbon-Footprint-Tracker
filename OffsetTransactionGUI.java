@@ -336,6 +336,8 @@ public class OffsetTransactionGUI {  // No longer extends Application
         receiptBox.setPadding(new Insets(40));
         receiptBox.setAlignment(Pos.CENTER);
 
+        receiptBox.getChildren().add(Dashboard.Banner());
+
         // Create receipt display
         TextArea receiptArea = new TextArea(receipt);
         receiptArea.setEditable(false);
@@ -344,7 +346,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
             "-fx-font-family: 'Courier New', monospace; " +
             "-fx-font-size: 14px; " +
             "-fx-background-color: white; " +
-            "-fx-border-color: green; " +
+            "-fx-border-color: #508a97; " +
             "-fx-border-width: 3px; " +
             "-fx-border-radius: 10px; " +
             "-fx-background-radius: 10px;"
@@ -379,6 +381,7 @@ public class OffsetTransactionGUI {  // No longer extends Application
     public static ScrollPane createOffsetGUI() {
         VBox content = new VBox(10);
         content.getChildren().addAll(
+            Dashboard.Banner(),
                 Dashboard.MakeTitleLabel("Offset Emissions Transactions"),
                 Dashboard.makeLabel(String.format("Total Emissions: \n\n %.2f kg CO2", roundTo2Decimals(GreenPrintGUI.tracker.GetTotalEmissions()))),
                 createOffsetInputBox()
@@ -400,6 +403,8 @@ public class OffsetTransactionGUI {  // No longer extends Application
         OffsetsContainer.setPadding(new Insets(20));
         OffsetsContainer.setAlignment(Pos.CENTER);
         ArrayList<String> offsetEntries = Logger.filterOperation("OFFSET_PURCHASED");
+
+        OffsetsContainer.getChildren().add(Dashboard.Banner());
 
         OffsetsContainer.getChildren().add(Dashboard.MakeTitleLabel("Offset Purchase Log"));
         OffsetsContainer.getChildren().add(Dashboard.UserEntryLabel(String.format("%d offsets Purchased", offsetEntries.size())));

@@ -20,9 +20,13 @@ public class FootprintDiscountServer {
                     String input = in.readLine();
                     if (input != null) {
                         double totalEmission = Double.parseDouble(input);
+
+                        if (totalEmission < 0) { throw new IOException("Negative emission value received"); }
                         
                         // Generate random discount 1-30
                         int discountPct = random.nextInt(30) + 1;
+
+                        if (discountPct < 1 || discountPct > 30) { throw new IllegalArgumentException("Discount must be between 1 and 30, but was: " + discountPct); }
                         double discountedValue = totalEmission * (1.0 - discountPct / 100.0);
 
                         // Format response: DISCOUNT:pct:value

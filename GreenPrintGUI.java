@@ -29,7 +29,7 @@ public class GreenPrintGUI extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("GreenPrint GUI");
+        primaryStage.setTitle("BearFoot - Footprint Tracker");
         primaryStage.getIcons().add(new Image("icon.png"));
 
         // Save state when window closes

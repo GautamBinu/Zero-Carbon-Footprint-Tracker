@@ -26,6 +26,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.ScrollPane;
 import javafx.geometry.Side;
@@ -39,15 +40,22 @@ import javafx.geometry.Pos;
 public class Dashboard {
 
     
+    public static VBox Banner() {
+        Image bannerImage = new Image("BearFoot Banner.png");
+        javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(bannerImage);
+        VBox banner = new VBox(imageView);
+        banner.setAlignment(Pos.CENTER);
+        return banner;
+    }
 
 
     /**
      * Creates the title for the emission entries section of the dashboard with a styled label.
-     * @return a VBox containing the "Emission Entries" title label, styled with a larger font size, bold weight, green text color, and padding for spacing. The VBox is centered to ensure the title is prominently displayed above the list of emission entries in the dashboard.
+     * @return a VBox containing the "Emission Entries" title label, styled with a larger font size, bold weight, #198198 text color, and padding for spacing. The VBox is centered to ensure the title is prominently displayed above the list of emission entries in the dashboard.
      */
     public static VBox MakeTitleLabel(String string) {
         Label label = new Label(string);
-        label.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: green; -fx-padding: 20px;");
+        label.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #198198; -fx-padding: 20px;");
         VBox content = new VBox(10);
         content.setAlignment(Pos.CENTER);
         content.getChildren().addAll(label);
@@ -56,7 +64,7 @@ public class Dashboard {
 
 
     /**
-     * Helper method to create a styled label for the dashboard metrics. The label is designed with a white background, green border, rounded corners, bold text, and padding for better visual appeal. It also allows the label to grow with the window size for improved responsiveness. This method is used to create the labels for total entries, total emissions, and the highest emissions user in the dashboard overview section.
+     * Helper method to create a styled label for the dashboard metrics. The label is designed with a white background, #198198 border, rounded corners, bold text, and padding for better visual appeal. It also allows the label to grow with the window size for improved responsiveness. This method is used to create the labels for total entries, total emissions, and the highest emissions user in the dashboard overview section.
      * @param string
      * @return a styled Label object with the specified text, designed for use in the dashboard metrics section, providing a consistent and visually appealing format for displaying key information to users.
      */
@@ -69,10 +77,10 @@ public class Dashboard {
         // Center the multiline text itself (centers the bottom line underneath the top line)
         label.setTextAlignment(TextAlignment.CENTER);
 
-        // Apply styling for green text, green outline, white background, and rounded corners
+        // Apply styling for #198198 text, #198198 outline, white background, and rounded corners
         label.setStyle(
             "-fx-background-color: white; " +
-            "-fx-border-color: green; " +
+            "-fx-border-color: #198198; " +
             "-fx-border-width: 3px; " +
             "-fx-border-radius: 20px; " +  
             "-fx-background-radius: 20px; " +  
@@ -109,7 +117,7 @@ public class Dashboard {
 
     
     /**
-     * Creates the main content section of the dashboard, which includes three key metrics: total entries, total emissions, and the user with the highest emissions. Each metric is displayed in a styled label with a white background, green border, rounded corners, and bold text. The labels are arranged horizontally with spacing between them and are designed to grow with the window size for better responsiveness. This section provides users with a quick overview of their carbon footprint data at a glance.
+     * Creates the main content section of the dashboard, which includes three key metrics: total entries, total emissions, and the user with the highest emissions. Each metric is displayed in a styled label with a white background, #198198 border, rounded corners, and bold text. The labels are arranged horizontally with spacing between them and are designed to grow with the window size for better responsiveness. This section provides users with a quick overview of their carbon footprint data at a glance.
      * @return an HBox containing the three metric labels, styled and arranged for a visually
      */
 
@@ -154,7 +162,7 @@ public class Dashboard {
     }
 
     /**
-     * Creates a styled label for a user's name in the dashboard, designed to visually separate the user's section from their emission entries. The label features a white background, black border, rounded corners, bold text, and green text color to maintain the overall aesthetic of the dashboard. This method is used to generate the labels for each user in the detailed section of the dashboard, providing a clear and visually appealing way to group emission entries by user.
+     * Creates a styled label for a user's name in the dashboard, designed to visually separate the user's section from their emission entries. The label features a white background, black border, rounded corners, bold text, and #198198 text color to maintain the overall aesthetic of the dashboard. This method is used to generate the labels for each user in the detailed section of the dashboard, providing a clear and visually appealing way to group emission entries by user.
      * @param user
      * @return
      */
@@ -170,7 +178,7 @@ public class Dashboard {
                     "-fx-border-color: black; " +
                      "-fx-border-radius: 10px; " +  
                      "-fx-background-radius: 10px; " +  
-                    "-fx-text-fill: #2c5f2d; " +
+                    "-fx-text-fill: #2c707f; " +
                     "-fx-padding: 10px;");
 
         
@@ -179,7 +187,7 @@ public class Dashboard {
     }
 
     /**
-     * Creates a label for an individual emission entry, styled with a background color that reflects the magnitude of the emission (green for low, yellow for medium, red for high) and includes an event handler that shows a detailed alert with the entry's information when clicked. This method is used to generate the labels for each emission entry in the detailed section of the dashboard, providing users with an interactive way to view their emission data and understand the specifics of each entry by clicking on it.
+     * Creates a label for an individual emission entry, styled with a background color that reflects the magnitude of the emission (#198198 for low, yellow for medium, red for high) and includes an event handler that shows a detailed alert with the entry's information when clicked. This method is used to generate the labels for each emission entry in the detailed section of the dashboard, providing users with an interactive way to view their emission data and understand the specifics of each entry by clicking on it.
      * @param entry
      * @return a styled Label object representing an individual emission entry, designed to visually indicate the magnitude of the emission and provide interactivity for users to access detailed information about the entry through an alert dialog.
      */
@@ -214,7 +222,7 @@ public class Dashboard {
         );
 
         /**
-         * Adds a mouse click event handler to the emission label that displays an alert with detailed information about the emission entry when clicked. The alert includes the category, date, user name, specific details (e.g., KWH for energy, meal type for food), and the calculated emission in kg CO2. The alert is styled with a subtle off-white/greenish background and uses different text colors to differentiate between keys and values for better readability. This interactivity allows users to easily access and understand the specifics of each emission entry directly from the dashboard.
+         * Adds a mouse click event handler to the emission label that displays an alert with detailed information about the emission entry when clicked. The alert includes the category, date, user name, specific details (e.g., KWH for energy, meal type for food), and the calculated emission in kg CO2. The alert is styled with a subtle off-white/#198198ish background and uses different text colors to differentiate between keys and values for better readability. This interactivity allows users to easily access and understand the specifics of each emission entry directly from the dashboard.
          * @param event the MouseEvent triggered when the emission label is clicked, which initiates the display of an Alert dialog containing detailed information about the emission entry, including its category, date, user name, specific details, and calculated emissions, all styled for clarity and visual appeal.
          */
         emissionLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -228,10 +236,10 @@ public class Dashboard {
                 // 1. Get the DialogPane to customize its overall style
                 DialogPane dialogPane = alert.getDialogPane();
                 dialogPane.setPrefWidth(450); 
-                dialogPane.setStyle("-fx-background-color: #f9fbf9; -fx-font-size: 14px;"); // Subtle off-white/greenish background
+                dialogPane.setStyle("-fx-background-color: #f9fbf9; -fx-font-size: 14px;"); // Subtle off-white/#198198ish background
 
                 // 2. Set up styles for our labels
-                String headerStyle = "-fx-font-weight: bold; -fx-text-fill: #2c5f2d;"; // Dark green for keys
+                String headerStyle = "-fx-font-weight: bold; -fx-text-fill: #2c5f2d;"; // Dark #198198 for keys
                 String valueStyle = "-fx-font-weight: bold; -fx-text-fill: #000000; -fx-font-size: 15px;"; // Dark gray for values
 
                 // 3. Create a GridPane to perfectly align the details
@@ -296,7 +304,7 @@ public class Dashboard {
 
    
     /**
-     * Generates the detailed emission entries section of the dashboard, which lists all emission entries grouped by user. For each user, a label is created to display the user's name, followed by a FlowPane that contains labels for each of the user's emission entries. Each entry label is styled with a background color that reflects the magnitude of the emission (green for low, yellow for medium, red for high) and includes an event handler that shows a detailed alert with the entry's information when clicked. This method provides users with an organized and interactive way to view their individual emission entries on the dashboard.
+     * Generates the detailed emission entries section of the dashboard, which lists all emission entries grouped by user. For each user, a label is created to display the user's name, followed by a FlowPane that contains labels for each of the user's emission entries. Each entry label is styled with a background color that reflects the magnitude of the emission (#198198 for low, yellow for medium, red for high) and includes an event handler that shows a detailed alert with the entry's information when clicked. This method provides users with an organized and interactive way to view their individual emission entries on the dashboard.
      * @return a VBox containing the user labels and their corresponding emission entry labels, styled and
      */
     public static VBox GenerateEmissionEntries() {
@@ -327,13 +335,14 @@ public class Dashboard {
 
 
     /**
-     * Generates the detailed emission entries section of the dashboard, which lists all emission entries grouped by user. For each user, a label is created to display the user's name, followed by a FlowPane that contains labels for each of the user's emission entries. Each entry label is styled with a background color that reflects the magnitude of the emission (green for low, yellow for medium, red for high) and includes an event handler that shows a detailed alert with the entry's information when clicked. This method provides users with an organized and interactive way to view their individual emission entries on the dashboard.
+     * Generates the detailed emission entries section of the dashboard, which lists all emission entries grouped by user. For each user, a label is created to display the user's name, followed by a FlowPane that contains labels for each of the user's emission entries. Each entry label is styled with a background color that reflects the magnitude of the emission (#198198 for low, yellow for medium, red for high) and includes an event handler that shows a detailed alert with the entry's information when clicked. This method provides users with an organized and interactive way to view their individual emission entries on the dashboard.
      * @return a VBox containing the user labels and their corresponding emission entry labels, styled and arranged for clarity and interactivity, allowing users to easily navigate through their emission data on the dashboard.
      */
 
     public static ScrollPane createDashboard() {
         
         VBox content = new VBox(10);
+        content.getChildren().add(Banner());
 
 
         if (GreenPrintGUI.tracker.getTotalEntries() == 0) {

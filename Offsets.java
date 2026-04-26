@@ -39,7 +39,7 @@ public class Offsets {
 
         String totalCostLine;
         if (isDiscounted) {
-            totalCostLine = String.format("Total Cost: %.2f AED (Discounted, saved %.2f AED)", finalCost, savings);
+            totalCostLine = String.format("Total Cost: %.2f AED (Discounted %.0f%%, saved %.2f AED)", finalCost, savings / (savings + finalCost) * 100, savings);
         } else {
             totalCostLine = String.format("Total Cost: %.2f AED", finalCost);
         }

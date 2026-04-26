@@ -37,7 +37,7 @@ public class DataOperationIO {
         "-fx-font-size: 12px; " +
         "-fx-font-weight: bold;" +
         "-fx-background-color: #ffffff; " +
-        "-fx-border-color: #004d27; " +
+        "-fx-border-color: #198198; " +
         "-fx-border-radius: 8px; " + // Added curved border
         "-fx-background-radius: 8px;"; // Adjust this number to increase/decrease the gap
 
@@ -50,6 +50,8 @@ public class DataOperationIO {
     static String sharedUserName = "";
     static String sharedDate = "";
     static Tab AddUserTab;
+
+    private static final String WhiteBackgroundStyle = "-fx-background-color: #ffffff;";
 
     /**
      * Creates a styled error label with a red text color and bold font weight, designed to provide clear and visually distinct feedback to users when an error occurs. This method is used throughout the "Data Operations" tab to display error messages in a consistent and attention-grabbing manner, helping users quickly identify issues with their input or actions.
@@ -94,6 +96,9 @@ public class DataOperationIO {
     public static VBox SearchUserTab() {
         VBox searchBox = new VBox(10);
         searchBox.setAlignment(Pos.CENTER);
+        searchBox.setStyle(WhiteBackgroundStyle);
+
+        searchBox.getChildren().add(Dashboard.Banner());
 
         TextField searchField = CreateTextField("Enter User Name to Search");
         Button searchButton = CreateButton("Search");
@@ -191,8 +196,8 @@ public class DataOperationIO {
         button.setStyle(
             PassiveStyle + // Base style for consistency
             "-fx-font-size: 14px; " + // Increased size for better visibility
-            "-fx-text-fill: #004d27; " + // White text for contrast
-            "-fx-border-color: #004d27; " 
+            "-fx-text-fill: #000000; " + // White text for contrast
+            "-fx-border-color: #198198; " 
         );
         button.setPrefHeight(45); // Increased height for better clickability
         button.setMaxWidth(200); // Set a max width for consistency
@@ -265,7 +270,7 @@ public class DataOperationIO {
         
         "-fx-font-size: 18px; " +  
         "-fx-font-weight: 900; " +  
-        "-fx-text-fill: #004d27;"   
+        "-fx-text-fill: #198198;"   
     );
     
     // 2. Create the TextField
@@ -319,6 +324,8 @@ public class DataOperationIO {
     public static VBox TransportationEmissionsFields() {
         VBox transportationBox = new VBox(10);
         transportationBox.setAlignment(Pos.CENTER);
+        transportationBox.setStyle(WhiteBackgroundStyle);
+        transportationBox.getChildren().add(Dashboard.Banner());
 
         // Create fields for transportation emissions
         HBox CreateIDField = CreateEmissionTypeTextField("T");
@@ -434,6 +441,8 @@ public class DataOperationIO {
     public static VBox EnergyEmissionsFields() {
         VBox energyBox = new VBox(10);
         energyBox.setAlignment(Pos.CENTER);
+        energyBox.setStyle(WhiteBackgroundStyle);
+        energyBox.getChildren().add(Dashboard.Banner());
 
         // Create fields for energy emissions
         HBox CreateIDField = CreateEmissionTypeTextField("E");
@@ -548,6 +557,8 @@ public class DataOperationIO {
     public static VBox FoodEmissionsFields() {
         VBox foodBox = new VBox(10);
         foodBox.setAlignment(Pos.CENTER);
+        foodBox.setStyle(WhiteBackgroundStyle);
+        foodBox.getChildren().add(Dashboard.Banner());
 
         // Create fields for food emissions
         HBox CreateIDField = CreateEmissionTypeTextField("F");
@@ -667,6 +678,9 @@ public class DataOperationIO {
         VBox initialBox = new VBox(20);
         initialBox.setPadding(new javafx.geometry.Insets(40)); // Increased padding for breathing room
         initialBox.setAlignment(Pos.CENTER);
+        initialBox.setStyle(WhiteBackgroundStyle);
+
+        initialBox.getChildren().add(Dashboard.Banner());
 
         // Create UI elements
         TextField userNameField = CreateTextField("Enter User Name");
