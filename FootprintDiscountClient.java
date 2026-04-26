@@ -127,11 +127,7 @@ public class FootprintDiscountClient {
         try {
             String[] parts = response.split(":");
 
-            if (parts.length != 3) {
-                throw new IOException("Invalid response from server. Please try again.");
-            }
-
-            if (!parts[0].equals("DISCOUNT")) {
+            if (parts.length != 3 || !parts[0].equals("DISCOUNT")) {
                 throw new IOException("Invalid response from server. Please try again.");
             }
 
